@@ -1,81 +1,132 @@
 import { useState } from "react";
 
+const C = {
+  bg: "#1E1D1D", sidebar: "#111010", card: "#111010",
+  border: "#2a2a2a", inner: "#1e1e1e",
+  yellow: "#FFDD76", pink: "#E74C89", orange: "#FEA55B",
+  light: "#F8F8FA", muted: "#666", dim: "#555",
+};
+
 const projects = [
-  { id: 1, initials: "BC", name: "Brand Campaign", members: 4, status: "Active", balance: 6200, pct: 67, split: "40/30/30", color: "#FAECE7", text: "#993C1D", team: ["MR","JK","AN","+1"] },
-  { id: 2, initials: "DS", name: "Dev Sprint Q2", members: 2, status: "Active", balance: 3750, pct: 42, split: "60/40", color: "#EEEDFE", text: "#534AB7", team: ["LM","RO"] },
-  { id: 3, initials: "RF", name: "Research Fund", members: 3, status: "Active", balance: 2530, pct: 25, split: "Equal", color: "#E1F5EE", text: "#0F6E56", team: ["KP","SB","TN"] },
+  { id:1, initials:"BC", name:"Brand Campaign", members:4, balance:6200, pct:67, split:"40/30/30", accent:C.yellow },
+  { id:2, initials:"DS", name:"Dev Sprint Q2",  members:2, balance:3750, pct:42, split:"60/40",    accent:C.pink },
+  { id:3, initials:"RF", name:"Research Fund",  members:3, balance:2530, pct:25, split:"Equal",    accent:C.orange },
 ];
 
 const activity = [
-  { type: "in", label: "Client payment · Brand Campaign", date: "Today, 2:14 PM", amount: "+$5,000", color: "#E1F5EE", textColor: "#0F6E56" },
-  { type: "split", label: "Auto split triggered", date: "Today, 2:14 PM", amount: "–$5,000", color: "#EEEDFE", textColor: "#534AB7" },
-  { type: "out", label: "Payout · Ana N.", date: "Yesterday", amount: "–$1,500", color: "#FAECE7", textColor: "#993C1D" },
-  { type: "in", label: "Invoice paid · Dev Sprint", date: "Apr 11", amount: "+$3,200", color: "#E1F5EE", textColor: "#0F6E56" },
+  { type:"in",    label:"Client payment · Brand", date:"Today, 2:14 PM",  amount:"+$5,000",  color:C.yellow },
+  { type:"split", label:"Auto split triggered",   date:"Today, 2:14 PM",  amount:"–$5,000",  color:C.orange },
+  { type:"out",   label:"Payout · Ana N.",         date:"Yesterday",       amount:"–$1,500",  color:C.pink },
+  { type:"in",    label:"Invoice paid · Dev Sprint",date:"Apr 11",         amount:"+$3,200",  color:C.yellow },
 ];
 
-const recipients = [
-  { initials: "AN", name: "Ana Navarro", email: "ana@studio.co", color: "#FAECE7", text: "#993C1D" },
-  { initials: "JK", name: "James K.", email: "james@studiomail.com", color: "#EEEDFE", text: "#534AB7" },
-];
+const fonts = `'Plus Jakarta Sans', sans-serif`;
+
+function Sidebar({ page, setPage }) {
+  const nav = ["Dashboard","Projects","Payments","Activity"];
+  const proj = [
+    { name:"Brand Campaign", color:C.yellow },
+    { name:"Dev Sprint Q2",  color:C.pink },
+    { name:"Research Fund",  color:C.orange },
+  ];
+  return (
+    <div style={{ background:C.sidebar, borderRight:`1px solid ${C.border}`, padding:"24px 0", display:"flex", flexDirection:"column", fontFamily:fonts }}>
+      <div style={{ display:"flex", alignItems:"center", gap:10, padding:"0 20px 32px" }}>
+        <div style={{ width:32, height:32, borderRadius:8, background:C.yellow, display:"flex", alignItems:"center", justifyContent:"center", fontSize:14 }}>▲</div>
+        <span style={{ fontSize:18, fontWeight:700, color:C.light, letterSpacing:"-.3px" }}>fuel</span>
+      </div>
+      <div style={{ fontSize:10, color:C.dim, letterSpacing:".1em", textTransform:"uppercase", padding:"0 20px 8px" }}>Main</div>
+      {nav.map(item => (
+        <div key={item} onClick={() => setPage(item)}
+          style={{ display:"flex", alignItems:"center", gap:10, padding:"10px 20px", fontSize:13, cursor:"pointer",
+            borderLeft: page===item ? `2px solid ${C.yellow}` : "2px solid transparent",
+            background: page===item ? "rgba(255,221,118,.07)" : "transparent",
+            color: page===item ? C.yellow : "#888" }}>
+          <div style={{ width:6, height:6, borderRadius:"50%", background:"currentColor", flexShrink:0 }}></div>
+          {item}
+        </div>
+      ))}
+      <div style={{ fontSize:10, color:C.dim, letterSpacing:".1em", textTransform:"uppercase", padding:"20px 20px 8px" }}>Projects</div>
+      {proj.map(p => (
+        <div key={p.name} style={{ display:"flex", alignItems:"center", gap:10, padding:"9px 20px", fontSize:13, color:"#888", cursor:"pointer" }}>
+          <div style={{ width:6, height:6, borderRadius:"50%", background:p.color, flexShrink:0 }}></div>
+          {p.name}
+        </div>
+      ))}
+      <div style={{ marginTop:"auto", padding:"16px 20px", borderTop:`1px solid ${C.border}`, display:"flex", alignItems:"center", gap:10 }}>
+        <div style={{ width:34, height:34, borderRadius:"50%", background:C.yellow, display:"flex", alignItems:"center", justifyContent:"center", fontSize:11, fontWeight:700, color:C.bg }}>YN</div>
+        <div>
+          <div style={{ fontSize:13, color:C.light, fontWeight:500 }}>You</div>
+          <div style={{ fontSize:11, color:C.dim }}>Owner</div>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 function Dashboard() {
+  const metrics = [
+    { label:"Total balance",    value:"$12,480", sub:"↑ 18% this month", accent:true },
+    { label:"Received",         value:"$18,500", sub:"Across 3 projects" },
+    { label:"Paid out",         value:"$6,020",  sub:"8 transactions" },
+    { label:"Members",          value:"7",        sub:"All paid on time", subYellow:true },
+  ];
   return (
-    <div style={{ padding: 28, display: "flex", flexDirection: "column", gap: 20 }}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-        <h1 style={{ fontSize: 20, fontWeight: 600, margin: 0 }}>Dashboard</h1>
-        <div style={{ display: "flex", gap: 10 }}>
-          <button style={{ padding: "8px 14px", fontSize: 13, border: "1px solid #ddd", borderRadius: 8, background: "white", cursor: "pointer" }}>Receive</button>
-          <button style={{ padding: "8px 16px", fontSize: 13, border: "none", borderRadius: 8, background: "#D85A30", color: "white", cursor: "pointer" }}>+ Send funds</button>
+    <div style={{ padding:32, display:"flex", flexDirection:"column", gap:24, fontFamily:fonts }}>
+      <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-end" }}>
+        <div>
+          <div style={{ fontSize:11, color:C.dim, textTransform:"uppercase", letterSpacing:".08em", marginBottom:4 }}>April 2026</div>
+          <h1 style={{ fontSize:28, fontWeight:700, color:C.light, letterSpacing:"-.5px", margin:0 }}>Dashboard</h1>
+        </div>
+        <div style={{ display:"flex", gap:10 }}>
+          <button style={{ background:"transparent", border:`1px solid ${C.border}`, borderRadius:8, padding:"9px 16px", fontSize:13, color:"#aaa", cursor:"pointer", fontFamily:fonts }}>Receive</button>
+          <button style={{ background:C.yellow, color:C.bg, border:"none", borderRadius:8, padding:"9px 18px", fontSize:13, fontWeight:700, cursor:"pointer", fontFamily:fonts }}>+ Send funds</button>
         </div>
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 12 }}>
-        {[
-          { label: "Total balance", value: "$12,480", sub: "↑ 18% this month", subColor: "#0F6E56" },
-          { label: "Received this month", value: "$18,500", sub: "Across 3 projects", subColor: "#aaa" },
-          { label: "Paid out", value: "$6,020", sub: "8 transactions", subColor: "#aaa" },
-          { label: "Active members", value: "7", sub: "All paid on time", subColor: "#0F6E56" },
-        ].map(m => (
-          <div key={m.label} style={{ background: "#f5f5f3", borderRadius: 8, padding: "14px 16px" }}>
-            <div style={{ fontSize: 11, color: "#888", marginBottom: 6 }}>{m.label}</div>
-            <div style={{ fontSize: 22, fontWeight: 600 }}>{m.value}</div>
-            <div style={{ fontSize: 11, color: m.subColor, marginTop: 3 }}>{m.sub}</div>
+      <div style={{ display:"grid", gridTemplateColumns:"repeat(4,1fr)", gap:12 }}>
+        {metrics.map(m => (
+          <div key={m.label} style={{ background: m.accent ? C.yellow : C.card, border:`1px solid ${m.accent ? C.yellow : C.border}`, borderRadius:12, padding:18 }}>
+            <div style={{ fontSize:11, color: m.accent ? "rgba(30,29,29,.6)" : C.muted, textTransform:"uppercase", letterSpacing:".06em", marginBottom:8 }}>{m.label}</div>
+            <div style={{ fontSize:28, fontWeight:700, color: m.accent ? C.bg : C.light, letterSpacing:"-.5px", lineHeight:1 }}>{m.value}</div>
+            <div style={{ fontSize:11, color: m.accent ? "rgba(30,29,29,.5)" : m.subYellow ? C.yellow : C.dim, marginTop:6 }}>{m.sub}</div>
           </div>
         ))}
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 340px", gap: 16 }}>
-        <div style={{ background: "white", border: "1px solid #eee", borderRadius: 12, padding: 18 }}>
-          <div style={{ fontSize: 13, fontWeight: 600, marginBottom: 14 }}>Active projects</div>
+      <div style={{ display:"grid", gridTemplateColumns:"1fr 320px", gap:16 }}>
+        <div style={{ background:C.card, border:`1px solid ${C.border}`, borderRadius:14, padding:20 }}>
+          <div style={{ fontSize:11, fontWeight:600, color:C.muted, textTransform:"uppercase", letterSpacing:".08em", marginBottom:16 }}>Active projects</div>
           {projects.map(p => (
-            <div key={p.id} style={{ display: "flex", alignItems: "center", gap: 12, padding: "10px 0", borderBottom: "1px solid #f0f0f0" }}>
-              <div style={{ width: 36, height: 36, borderRadius: 8, background: p.color, color: p.text, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, fontWeight: 600, flexShrink: 0 }}>{p.initials}</div>
-              <div style={{ flex: 1 }}>
-                <div style={{ fontSize: 13, fontWeight: 500 }}>{p.name}</div>
-                <div style={{ fontSize: 11, color: "#aaa" }}>{p.members} members · Split: {p.split}</div>
-                <div style={{ height: 3, background: "#f0f0f0", borderRadius: 2, marginTop: 6, width: 120 }}>
-                  <div style={{ height: "100%", width: `${p.pct}%`, background: "#D85A30", borderRadius: 2 }} />
+            <div key={p.id} style={{ display:"flex", alignItems:"center", gap:12, padding:"12px 0", borderBottom:`1px solid ${C.inner}` }}>
+              <div style={{ width:38, height:38, borderRadius:10, background:`${p.accent}18`, color:p.accent, display:"flex", alignItems:"center", justifyContent:"center", fontSize:11, fontWeight:700, flexShrink:0 }}>{p.initials}</div>
+              <div style={{ flex:1 }}>
+                <div style={{ fontSize:13, fontWeight:600, color:C.light }}>{p.name}</div>
+                <div style={{ fontSize:11, color:C.dim, marginTop:2 }}>{p.members} members · {p.split} split</div>
+                <div style={{ height:2, background:"#222", borderRadius:2, marginTop:7, width:100 }}>
+                  <div style={{ height:"100%", width:`${p.pct}%`, background:p.accent, borderRadius:2 }} />
                 </div>
               </div>
-              <div style={{ textAlign: "right" }}>
-                <div style={{ fontSize: 13, fontWeight: 500 }}>${p.balance.toLocaleString()}</div>
+              <div style={{ textAlign:"right" }}>
+                <div style={{ fontSize:14, fontWeight:600, color:C.light }}>${p.balance.toLocaleString()}</div>
+                <div style={{ fontSize:10, color:C.dim, marginTop:3 }}>{p.pct}% remaining</div>
               </div>
             </div>
           ))}
         </div>
 
-        <div style={{ background: "white", border: "1px solid #eee", borderRadius: 12, padding: 18 }}>
-          <div style={{ fontSize: 13, fontWeight: 600, marginBottom: 14 }}>Recent activity</div>
+        <div style={{ background:C.card, border:`1px solid ${C.border}`, borderRadius:14, padding:20 }}>
+          <div style={{ fontSize:11, fontWeight:600, color:C.muted, textTransform:"uppercase", letterSpacing:".08em", marginBottom:16 }}>Recent activity</div>
           {activity.map((tx, i) => (
-            <div key={i} style={{ display: "flex", alignItems: "center", gap: 10, padding: "9px 0", borderBottom: i < activity.length - 1 ? "1px solid #f5f5f5" : "none" }}>
-              <div style={{ width: 30, height: 30, borderRadius: "50%", background: tx.color, color: tx.textColor, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, flexShrink: 0 }}>
-                {tx.type === "in" ? "↓" : tx.type === "out" ? "↑" : "⋮"}
+            <div key={i} style={{ display:"flex", alignItems:"center", gap:10, padding:"10px 0", borderBottom: i<activity.length-1 ? `1px solid ${C.inner}` : "none" }}>
+              <div style={{ width:32, height:32, borderRadius:"50%", background:`${tx.color}18`, color:tx.color, display:"flex", alignItems:"center", justifyContent:"center", fontSize:12, flexShrink:0 }}>
+                {tx.type==="in" ? "↓" : tx.type==="out" ? "↑" : "⋮"}
               </div>
               <div>
-                <div style={{ fontSize: 12 }}>{tx.label}</div>
-                <div style={{ fontSize: 10, color: "#aaa" }}>{tx.date}</div>
+                <div style={{ fontSize:12, color:"#ccc" }}>{tx.label}</div>
+                <div style={{ fontSize:10, color:C.dim, marginTop:1 }}>{tx.date}</div>
               </div>
-              <div style={{ marginLeft: "auto", fontSize: 12, fontWeight: 500, color: tx.textColor }}>{tx.amount}</div>
+              <div style={{ marginLeft:"auto", fontSize:12, fontWeight:600, color:tx.color }}>{tx.amount}</div>
             </div>
           ))}
         </div>
@@ -84,36 +135,32 @@ function Dashboard() {
   );
 }
 
-function Projects({ setPage }) {
+function Projects() {
   return (
-    <div style={{ padding: 28 }}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 24 }}>
-        <h1 style={{ fontSize: 20, fontWeight: 600, margin: 0 }}>Projects</h1>
-        <button style={{ background: "#D85A30", color: "white", border: "none", borderRadius: 8, padding: "8px 16px", fontSize: 13, cursor: "pointer" }}>+ New project</button>
+    <div style={{ padding:32, fontFamily:fonts }}>
+      <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-end", marginBottom:24 }}>
+        <h1 style={{ fontSize:28, fontWeight:700, color:C.light, letterSpacing:"-.5px", margin:0 }}>Projects</h1>
+        <button style={{ background:C.yellow, color:C.bg, border:"none", borderRadius:8, padding:"9px 18px", fontSize:13, fontWeight:700, cursor:"pointer", fontFamily:fonts }}>+ New project</button>
       </div>
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 14 }}>
+      <div style={{ display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:14 }}>
         {projects.map(p => (
-          <div key={p.id} style={{ background: "white", border: "1px solid #eee", borderRadius: 12, padding: 16, cursor: "pointer" }}>
-            <div style={{ width: 40, height: 40, borderRadius: 10, background: p.color, color: p.text, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 600, marginBottom: 12 }}>{p.initials}</div>
-            <div style={{ fontSize: 14, fontWeight: 600, marginBottom: 2 }}>{p.name}</div>
-            <div style={{ fontSize: 11, color: "#aaa", marginBottom: 12 }}>{p.members} members · {p.status}</div>
-            <div style={{ fontSize: 18, fontWeight: 600, marginBottom: 4 }}>${p.balance.toLocaleString()}</div>
-            <div style={{ height: 3, background: "#f0f0f0", borderRadius: 2, marginBottom: 10 }}>
-              <div style={{ height: "100%", width: `${p.pct}%`, background: "#D85A30", borderRadius: 2 }} />
+          <div key={p.id} style={{ background:C.card, border:`1px solid ${C.border}`, borderRadius:14, padding:18, cursor:"pointer" }}>
+            <div style={{ width:42, height:42, borderRadius:10, background:`${p.accent}18`, color:p.accent, display:"flex", alignItems:"center", justifyContent:"center", fontSize:13, fontWeight:700, marginBottom:14 }}>{p.initials}</div>
+            <div style={{ fontSize:15, fontWeight:700, color:C.light, marginBottom:3 }}>{p.name}</div>
+            <div style={{ fontSize:11, color:C.dim, marginBottom:14 }}>{p.members} members · Active</div>
+            <div style={{ fontSize:22, fontWeight:700, color:C.light, marginBottom:6 }}>${p.balance.toLocaleString()}</div>
+            <div style={{ height:2, background:"#222", borderRadius:2, marginBottom:12 }}>
+              <div style={{ height:"100%", width:`${p.pct}%`, background:p.accent, borderRadius:2 }} />
             </div>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-              <div style={{ display: "flex" }}>
-                {p.team.map((t, i) => (
-                  <div key={i} style={{ width: 22, height: 22, borderRadius: "50%", background: p.color, color: p.text, border: "2px solid white", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 9, fontWeight: 600, marginLeft: i > 0 ? -6 : 0 }}>{t}</div>
-                ))}
-              </div>
-              <span style={{ fontSize: 10, color: "#aaa" }}>{p.split}</span>
+            <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center" }}>
+              <div style={{ fontSize:11, color:p.accent, fontWeight:600 }}>{p.split} split</div>
+              <div style={{ fontSize:11, color:C.dim }}>{p.members} members</div>
             </div>
           </div>
         ))}
-        <div style={{ border: "1px dashed #ddd", borderRadius: 12, padding: 16, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", minHeight: 160, cursor: "pointer" }}>
-          <div style={{ fontSize: 24, color: "#ccc", marginBottom: 6 }}>+</div>
-          <div style={{ fontSize: 12, color: "#aaa" }}>New project</div>
+        <div style={{ border:`1px dashed ${C.border}`, borderRadius:14, padding:18, display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", minHeight:180, cursor:"pointer" }}>
+          <div style={{ fontSize:28, color:C.border, marginBottom:8 }}>+</div>
+          <div style={{ fontSize:13, color:C.dim }}>New project</div>
         </div>
       </div>
     </div>
@@ -123,60 +170,64 @@ function Projects({ setPage }) {
 function SendFunds() {
   const [amount, setAmount] = useState(1500);
   const [selected, setSelected] = useState(0);
+  const recipients = [
+    { initials:"AN", name:"Ana Navarro", email:"ana@studio.co", color:C.yellow },
+    { initials:"JK", name:"James K.", email:"james@studiomail.com", color:C.pink },
+  ];
   const fee = +(amount * 0.01).toFixed(2);
   const receives = +(amount - fee).toFixed(2);
 
   return (
-    <div style={{ padding: 28 }}>
-      <div style={{ marginBottom: 24 }}>
-        <div style={{ fontSize: 13, color: "#aaa", marginBottom: 4 }}>Payments</div>
-        <h1 style={{ fontSize: 20, fontWeight: 600, margin: 0 }}>Send funds</h1>
+    <div style={{ padding:32, fontFamily:fonts }}>
+      <div style={{ marginBottom:24 }}>
+        <div style={{ fontSize:11, color:C.dim, textTransform:"uppercase", letterSpacing:".08em", marginBottom:4 }}>Payments</div>
+        <h1 style={{ fontSize:28, fontWeight:700, color:C.light, letterSpacing:"-.5px", margin:0 }}>Send funds</h1>
       </div>
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 280px", gap: 16 }}>
-        <div style={{ background: "white", border: "1px solid #eee", borderRadius: 12, padding: 18 }}>
-          <div style={{ fontSize: 12, color: "#888", marginBottom: 6 }}>Amount</div>
+      <div style={{ display:"grid", gridTemplateColumns:"1fr 280px", gap:16 }}>
+        <div style={{ background:C.card, border:`1px solid ${C.border}`, borderRadius:14, padding:20 }}>
+          <div style={{ fontSize:11, color:C.muted, textTransform:"uppercase", letterSpacing:".06em", marginBottom:8 }}>Amount</div>
           <input type="number" value={amount} onChange={e => setAmount(Number(e.target.value))}
-            style={{ width: "100%", border: "none", borderBottom: "2px solid #eee", fontSize: 32, fontWeight: 600, textAlign: "center", padding: "8px 0", marginBottom: 20, background: "transparent", outline: "none" }} />
-          <div style={{ fontSize: 12, color: "#888", marginBottom: 8 }}>To</div>
-          {recipients.map((r, i) => (
+            style={{ width:"100%", border:"none", borderBottom:`2px solid ${C.border}`, fontSize:36, fontWeight:700, textAlign:"center", padding:"8px 0", marginBottom:24, background:"transparent", outline:"none", color:C.light, fontFamily:fonts }} />
+          <div style={{ fontSize:11, color:C.muted, textTransform:"uppercase", letterSpacing:".06em", marginBottom:10 }}>To</div>
+          {recipients.map((r,i) => (
             <div key={i} onClick={() => setSelected(i)}
-              style={{ display: "flex", alignItems: "center", gap: 10, padding: "10px 12px", border: `1px solid ${selected === i ? "#D85A30" : "#eee"}`, borderRadius: 8, marginBottom: 6, cursor: "pointer", background: selected === i ? "#FAECE7" : "white" }}>
-              <div style={{ width: 32, height: 32, borderRadius: "50%", background: r.color, color: r.text, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 600 }}>{r.initials}</div>
+              style={{ display:"flex", alignItems:"center", gap:10, padding:"12px 14px", border:`1px solid ${selected===i ? r.color : C.border}`, borderRadius:10, marginBottom:8, cursor:"pointer", background: selected===i ? `${r.color}0f` : "transparent" }}>
+              <div style={{ width:34, height:34, borderRadius:"50%", background:`${r.color}22`, color:r.color, display:"flex", alignItems:"center", justifyContent:"center", fontSize:11, fontWeight:700 }}>{r.initials}</div>
               <div>
-                <div style={{ fontSize: 13, fontWeight: 500 }}>{r.name}</div>
-                <div style={{ fontSize: 11, color: "#aaa" }}>{r.email}</div>
+                <div style={{ fontSize:13, fontWeight:600, color:C.light }}>{r.name}</div>
+                <div style={{ fontSize:11, color:C.dim }}>{r.email}</div>
               </div>
-              {selected === i && <div style={{ marginLeft: "auto", fontSize: 11, color: "#0F6E56" }}>● Selected</div>}
+              {selected===i && <div style={{ marginLeft:"auto", fontSize:11, color:r.color, fontWeight:600 }}>● Selected</div>}
             </div>
           ))}
-          <div style={{ marginTop: 14 }}>
-            <div style={{ fontSize: 12, color: "#888", marginBottom: 6 }}>From project</div>
-            <select style={{ width: "100%", border: "1px solid #eee", borderRadius: 8, padding: "10px 12px", fontSize: 13, marginBottom: 14, background: "white" }}>
+          <div style={{ marginTop:16 }}>
+            <div style={{ fontSize:11, color:C.muted, textTransform:"uppercase", letterSpacing:".06em", marginBottom:8 }}>From project</div>
+            <select style={{ width:"100%", border:`1px solid ${C.border}`, borderRadius:8, padding:"10px 12px", fontSize:13, marginBottom:14, background:C.bg, color:C.light, fontFamily:fonts }}>
               <option>Brand Campaign — $6,200 available</option>
             </select>
-            <div style={{ fontSize: 12, color: "#888", marginBottom: 6 }}>Note</div>
-            <input placeholder="e.g. Design milestone payout" style={{ width: "100%", border: "1px solid #eee", borderRadius: 8, padding: "10px 12px", fontSize: 13, outline: "none" }} />
+            <div style={{ fontSize:11, color:C.muted, textTransform:"uppercase", letterSpacing:".06em", marginBottom:8 }}>Note</div>
+            <input placeholder="e.g. Design milestone payout" style={{ width:"100%", border:`1px solid ${C.border}`, borderRadius:8, padding:"10px 12px", fontSize:13, outline:"none", background:C.bg, color:C.light, fontFamily:fonts }} />
           </div>
         </div>
-        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-          <div style={{ background: "white", border: "1px solid #eee", borderRadius: 12, padding: 18 }}>
-            <div style={{ fontSize: 13, fontWeight: 600, marginBottom: 12 }}>Transaction summary</div>
+        <div style={{ display:"flex", flexDirection:"column", gap:12 }}>
+          <div style={{ background:C.card, border:`1px solid ${C.border}`, borderRadius:14, padding:20 }}>
+            <div style={{ fontSize:11, fontWeight:600, color:C.muted, textTransform:"uppercase", letterSpacing:".08em", marginBottom:14 }}>Summary</div>
             {[
-              { label: "You send", value: `$${amount.toLocaleString()}` },
-              { label: "FUEL fee (1%)", value: `$${fee}` },
-              { label: "They receive", value: `$${receives.toLocaleString()}`, green: true },
-              { label: "Delivery", value: "Instant" },
-            ].map((row, i) => (
-              <div key={i} style={{ display: "flex", justifyContent: "space-between", fontSize: 13, padding: "7px 0", borderBottom: i < 3 ? "1px solid #f5f5f5" : "none" }}>
-                <span style={{ color: "#888" }}>{row.label}</span>
-                <span style={{ fontWeight: 500, color: row.green ? "#0F6E56" : "inherit" }}>{row.value}</span>
+              { label:"You send", value:`$${amount.toLocaleString()}` },
+              { label:"FUEL fee (1%)", value:`$${fee}` },
+              { label:"They receive", value:`$${receives.toLocaleString()}`, gold:true },
+              { label:"Delivery", value:"Instant" },
+            ].map((row,i) => (
+              <div key={i} style={{ display:"flex", justifyContent:"space-between", fontSize:13, padding:"8px 0", borderBottom: i<3 ? `1px solid ${C.inner}` : "none" }}>
+                <span style={{ color:C.muted }}>{row.label}</span>
+                <span style={{ fontWeight:600, color: row.gold ? C.yellow : C.light }}>{row.value}</span>
               </div>
             ))}
           </div>
-          <button style={{ background: "#D85A30", color: "white", border: "none", borderRadius: 10, padding: 14, fontSize: 14, fontWeight: 600, cursor: "pointer" }}>
+          <button style={{ background:C.yellow, color:C.bg, border:"none", borderRadius:10, padding:16, fontSize:15, fontWeight:700, cursor:"pointer", fontFamily:fonts }}>
             Send ${amount.toLocaleString()}
           </button>
-          <p style={{ fontSize: 11, color: "#aaa", textAlign: "center", margin: 0 }}>Funds settle instantly. No conversion fees for USD.</p>
+          <p style={{ fontSize:11, color:C.dim, textAlign:"center", margin:0 }}>Instant settlement · No conversion fees</p>
         </div>
       </div>
     </div>
@@ -185,34 +236,14 @@ function SendFunds() {
 
 export default function App() {
   const [page, setPage] = useState("Dashboard");
-  const navItems = ["Dashboard", "Projects", "Payments", "Activity"];
-
   return (
-    <div style={{ display: "grid", gridTemplateColumns: "220px 1fr", minHeight: "100vh", fontFamily: "sans-serif", background: "#f5f5f3" }}>
-      <div style={{ background: "white", borderRight: "1px solid #eee", padding: "24px 0", display: "flex", flexDirection: "column" }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 10, padding: "0 20px 28px" }}>
-          <div style={{ width: 30, height: 30, borderRadius: 8, background: "#D85A30", display: "flex", alignItems: "center", justifyContent: "center", color: "white", fontWeight: 700, fontSize: 14 }}>▲</div>
-          <span style={{ fontSize: 17, fontWeight: 600 }}>fuel</span>
-        </div>
-        {navItems.map(item => (
-          <div key={item} onClick={() => setPage(item)}
-            style={{ padding: "9px 20px", fontSize: 13, cursor: "pointer", borderLeft: page === item ? "2px solid #D85A30" : "2px solid transparent", background: page === item ? "#FAECE7" : "transparent", color: page === item ? "#D85A30" : "#666" }}>
-            {item}
-          </div>
-        ))}
-        <div style={{ marginTop: "auto", padding: "16px 20px", borderTop: "1px solid #eee", display: "flex", alignItems: "center", gap: 10 }}>
-          <div style={{ width: 32, height: 32, borderRadius: "50%", background: "#FAECE7", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 600, color: "#993C1D" }}>YN</div>
-          <div>
-            <div style={{ fontSize: 13 }}>You</div>
-            <div style={{ fontSize: 11, color: "#aaa" }}>Owner</div>
-          </div>
-        </div>
-      </div>
+    <div style={{ display:"grid", gridTemplateColumns:"220px 1fr", minHeight:"100vh", background:C.bg, fontFamily:fonts }}>
+      <Sidebar page={page} setPage={setPage} />
       <div>
-        {page === "Dashboard" && <Dashboard />}
-        {page === "Projects" && <Projects />}
-        {page === "Payments" && <SendFunds />}
-        {page === "Activity" && <div style={{ padding: 28, color: "#aaa", fontSize: 14 }}>Activity log coming soon</div>}
+        {page==="Dashboard" && <Dashboard />}
+        {page==="Projects" && <Projects />}
+        {page==="Payments" && <SendFunds />}
+        {page==="Activity" && <div style={{ padding:32, color:C.dim, fontSize:14, fontFamily:fonts }}>Activity log coming soon</div>}
       </div>
     </div>
   );
