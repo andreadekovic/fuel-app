@@ -1,34 +1,30 @@
 import { useState } from "react";
+import CreateProject from "./CreateProject";
 
 const C = {
-  bg: "#1E1D1D", sidebar: "#111010", card: "#111010",
-  border: "#2a2a2a", inner: "#1e1e1e",
-  yellow: "#FFDD76", pink: "#E74C89", orange: "#FEA55B",
-  light: "#F8F8FA", muted: "#666", dim: "#555",
+  bg:"#1E1D1D", sidebar:"#111010", card:"#111010",
+  border:"#2a2a2a", inner:"#1e1e1e",
+  yellow:"#FFDD76", pink:"#E74C89", orange:"#FEA55B",
+  light:"#F8F8FA", muted:"#666", dim:"#555",
 };
 
-const projects = [
-  { id:1, initials:"BC", name:"Brand Campaign", members:4, balance:6200, pct:67, split:"40/30/30", accent:C.yellow },
-  { id:2, initials:"DS", name:"Dev Sprint Q2",  members:2, balance:3750, pct:42, split:"60/40",    accent:C.pink },
-  { id:3, initials:"RF", name:"Research Fund",  members:3, balance:2530, pct:25, split:"Equal",    accent:C.orange },
+const fonts = "'Plus Jakarta Sans', sans-serif";
+
+const defaultProjects = [
+  { id:1, initials:"BC", name:"Brand Campaign", members:4, balance:6200, pct:67, split:"40/30/30", accent:"#FFDD76" },
+  { id:2, initials:"DS", name:"Dev Sprint Q2",  members:2, balance:3750, pct:42, split:"60/40",    accent:"#E74C89" },
+  { id:3, initials:"RF", name:"Research Fund",  members:3, balance:2530, pct:25, split:"Equal",    accent:"#FEA55B" },
 ];
 
 const activity = [
-  { type:"in",    label:"Client payment · Brand", date:"Today, 2:14 PM",  amount:"+$5,000",  color:C.yellow },
-  { type:"split", label:"Auto split triggered",   date:"Today, 2:14 PM",  amount:"–$5,000",  color:C.orange },
-  { type:"out",   label:"Payout · Ana N.",         date:"Yesterday",       amount:"–$1,500",  color:C.pink },
-  { type:"in",    label:"Invoice paid · Dev Sprint",date:"Apr 11",         amount:"+$3,200",  color:C.yellow },
+  { type:"in",    label:"Client payment · Brand", date:"Today, 2:14 PM",  amount:"+$5,000",  color:"#FFDD76" },
+  { type:"split", label:"Auto split triggered",   date:"Today, 2:14 PM",  amount:"–$5,000",  color:"#FEA55B" },
+  { type:"out",   label:"Payout · Ana N.",        date:"Yesterday",       amount:"–$1,500",  color:"#E74C89" },
+  { type:"in",    label:"Invoice paid · Dev Sprint", date:"Apr 11",       amount:"+$3,200",  color:"#FFDD76" },
 ];
 
-const fonts = `'Plus Jakarta Sans', sans-serif`;
-
-function Sidebar({ page, setPage }) {
+function Sidebar({ page, setPage, projects }) {
   const nav = ["Dashboard","Projects","Payments","Activity"];
-  const proj = [
-    { name:"Brand Campaign", color:C.yellow },
-    { name:"Dev Sprint Q2",  color:C.pink },
-    { name:"Research Fund",  color:C.orange },
-  ];
   return (
     <div style={{ background:C.sidebar, borderRight:`1px solid ${C.border}`, padding:"24px 0", display:"flex", flexDirection:"column", fontFamily:fonts }}>
       <div style={{ display:"flex", alignItems:"center", gap:10, padding:"0 20px 32px" }}>
@@ -47,9 +43,9 @@ function Sidebar({ page, setPage }) {
         </div>
       ))}
       <div style={{ fontSize:10, color:C.dim, letterSpacing:".1em", textTransform:"uppercase", padding:"20px 20px 8px" }}>Projects</div>
-      {proj.map(p => (
+      {projects.map(p => (
         <div key={p.name} style={{ display:"flex", alignItems:"center", gap:10, padding:"9px 20px", fontSize:13, color:"#888", cursor:"pointer" }}>
-          <div style={{ width:6, height:6, borderRadius:"50%", background:p.color, flexShrink:0 }}></div>
+          <div style={{ width:6, height:6, borderRadius:"50%", background:p.accent, flexShrink:0 }}></div>
           {p.name}
         </div>
       ))}
@@ -64,12 +60,12 @@ function Sidebar({ page, setPage }) {
   );
 }
 
-function Dashboard() {
+function Dashboard({ projects }) {
   const metrics = [
-    { label:"Total balance",    value:"$12,480", sub:"↑ 18% this month", accent:true },
-    { label:"Received",         value:"$18,500", sub:"Across 3 projects" },
-    { label:"Paid out",         value:"$6,020",  sub:"8 transactions" },
-    { label:"Members",          value:"7",        sub:"All paid on time", subYellow:true },
+    { label:"Total balance", value:"$12,480", sub:"↑ 18% this month", accent:true },
+    { label:"Received",      value:"$18,500", sub:"Across 3 projects" },
+    { label:"Paid out",      value:"$6,020",  sub:"8 transactions" },
+    { label:"Members",       value:"7",       sub:"All paid on time", subYellow:true },
   ];
   return (
     <div style={{ padding:32, display:"flex", flexDirection:"column", gap:24, fontFamily:fonts }}>
@@ -83,17 +79,15 @@ function Dashboard() {
           <button style={{ background:C.yellow, color:C.bg, border:"none", borderRadius:8, padding:"9px 18px", fontSize:13, fontWeight:700, cursor:"pointer", fontFamily:fonts }}>+ Send funds</button>
         </div>
       </div>
-
       <div style={{ display:"grid", gridTemplateColumns:"repeat(4,1fr)", gap:12 }}>
         {metrics.map(m => (
-          <div key={m.label} style={{ background: m.accent ? C.yellow : C.card, border:`1px solid ${m.accent ? C.yellow : C.border}`, borderRadius:12, padding:18 }}>
-            <div style={{ fontSize:11, color: m.accent ? "rgba(30,29,29,.6)" : C.muted, textTransform:"uppercase", letterSpacing:".06em", marginBottom:8 }}>{m.label}</div>
-            <div style={{ fontSize:28, fontWeight:700, color: m.accent ? C.bg : C.light, letterSpacing:"-.5px", lineHeight:1 }}>{m.value}</div>
-            <div style={{ fontSize:11, color: m.accent ? "rgba(30,29,29,.5)" : m.subYellow ? C.yellow : C.dim, marginTop:6 }}>{m.sub}</div>
+          <div key={m.label} style={{ background:m.accent ? C.yellow : C.card, border:`1px solid ${m.accent ? C.yellow : C.border}`, borderRadius:12, padding:18 }}>
+            <div style={{ fontSize:11, color:m.accent ? "rgba(30,29,29,.6)" : C.muted, textTransform:"uppercase", letterSpacing:".06em", marginBottom:8 }}>{m.label}</div>
+            <div style={{ fontSize:28, fontWeight:700, color:m.accent ? C.bg : C.light, letterSpacing:"-.5px", lineHeight:1 }}>{m.value}</div>
+            <div style={{ fontSize:11, color:m.accent ? "rgba(30,29,29,.5)" : m.subYellow ? C.yellow : C.dim, marginTop:6 }}>{m.sub}</div>
           </div>
         ))}
       </div>
-
       <div style={{ display:"grid", gridTemplateColumns:"1fr 320px", gap:16 }}>
         <div style={{ background:C.card, border:`1px solid ${C.border}`, borderRadius:14, padding:20 }}>
           <div style={{ fontSize:11, fontWeight:600, color:C.muted, textTransform:"uppercase", letterSpacing:".08em", marginBottom:16 }}>Active projects</div>
@@ -114,11 +108,10 @@ function Dashboard() {
             </div>
           ))}
         </div>
-
         <div style={{ background:C.card, border:`1px solid ${C.border}`, borderRadius:14, padding:20 }}>
           <div style={{ fontSize:11, fontWeight:600, color:C.muted, textTransform:"uppercase", letterSpacing:".08em", marginBottom:16 }}>Recent activity</div>
           {activity.map((tx, i) => (
-            <div key={i} style={{ display:"flex", alignItems:"center", gap:10, padding:"10px 0", borderBottom: i<activity.length-1 ? `1px solid ${C.inner}` : "none" }}>
+            <div key={i} style={{ display:"flex", alignItems:"center", gap:10, padding:"10px 0", borderBottom:i<activity.length-1 ? `1px solid ${C.inner}` : "none" }}>
               <div style={{ width:32, height:32, borderRadius:"50%", background:`${tx.color}18`, color:tx.color, display:"flex", alignItems:"center", justifyContent:"center", fontSize:12, flexShrink:0 }}>
                 {tx.type==="in" ? "↓" : tx.type==="out" ? "↑" : "⋮"}
               </div>
@@ -135,12 +128,12 @@ function Dashboard() {
   );
 }
 
-function Projects() {
+function Projects({ projects, onCreateProject }) {
   return (
     <div style={{ padding:32, fontFamily:fonts }}>
       <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-end", marginBottom:24 }}>
         <h1 style={{ fontSize:28, fontWeight:700, color:C.light, letterSpacing:"-.5px", margin:0 }}>Projects</h1>
-        <button style={{ background:C.yellow, color:C.bg, border:"none", borderRadius:8, padding:"9px 18px", fontSize:13, fontWeight:700, cursor:"pointer", fontFamily:fonts }}>+ New project</button>
+        <button onClick={onCreateProject} style={{ background:C.yellow, color:C.bg, border:"none", borderRadius:8, padding:"9px 18px", fontSize:13, fontWeight:700, cursor:"pointer", fontFamily:fonts }}>+ New project</button>
       </div>
       <div style={{ display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:14 }}>
         {projects.map(p => (
@@ -152,13 +145,13 @@ function Projects() {
             <div style={{ height:2, background:"#222", borderRadius:2, marginBottom:12 }}>
               <div style={{ height:"100%", width:`${p.pct}%`, background:p.accent, borderRadius:2 }} />
             </div>
-            <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center" }}>
-              <div style={{ fontSize:11, color:p.accent, fontWeight:600 }}>{p.split} split</div>
-              <div style={{ fontSize:11, color:C.dim }}>{p.members} members</div>
+            <div style={{ display:"flex", justifyContent:"space-between" }}>
+              <span style={{ fontSize:11, color:p.accent, fontWeight:600 }}>{p.split} split</span>
+              <span style={{ fontSize:11, color:C.dim }}>{p.members} members</span>
             </div>
           </div>
         ))}
-        <div style={{ border:`1px dashed ${C.border}`, borderRadius:14, padding:18, display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", minHeight:180, cursor:"pointer" }}>
+        <div onClick={onCreateProject} style={{ border:`1px dashed ${C.border}`, borderRadius:14, padding:18, display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", minHeight:180, cursor:"pointer" }}>
           <div style={{ fontSize:28, color:C.border, marginBottom:8 }}>+</div>
           <div style={{ fontSize:13, color:C.dim }}>New project</div>
         </div>
@@ -167,7 +160,7 @@ function Projects() {
   );
 }
 
-function SendFunds() {
+function SendFunds({ projects }) {
   const [amount, setAmount] = useState(1500);
   const [selected, setSelected] = useState(0);
   const recipients = [
@@ -191,7 +184,7 @@ function SendFunds() {
           <div style={{ fontSize:11, color:C.muted, textTransform:"uppercase", letterSpacing:".06em", marginBottom:10 }}>To</div>
           {recipients.map((r,i) => (
             <div key={i} onClick={() => setSelected(i)}
-              style={{ display:"flex", alignItems:"center", gap:10, padding:"12px 14px", border:`1px solid ${selected===i ? r.color : C.border}`, borderRadius:10, marginBottom:8, cursor:"pointer", background: selected===i ? `${r.color}0f` : "transparent" }}>
+              style={{ display:"flex", alignItems:"center", gap:10, padding:"12px 14px", border:`1px solid ${selected===i ? r.color : C.border}`, borderRadius:10, marginBottom:8, cursor:"pointer", background:selected===i ? `${r.color}0f` : "transparent" }}>
               <div style={{ width:34, height:34, borderRadius:"50%", background:`${r.color}22`, color:r.color, display:"flex", alignItems:"center", justifyContent:"center", fontSize:11, fontWeight:700 }}>{r.initials}</div>
               <div>
                 <div style={{ fontSize:13, fontWeight:600, color:C.light }}>{r.name}</div>
@@ -203,7 +196,7 @@ function SendFunds() {
           <div style={{ marginTop:16 }}>
             <div style={{ fontSize:11, color:C.muted, textTransform:"uppercase", letterSpacing:".06em", marginBottom:8 }}>From project</div>
             <select style={{ width:"100%", border:`1px solid ${C.border}`, borderRadius:8, padding:"10px 12px", fontSize:13, marginBottom:14, background:C.bg, color:C.light, fontFamily:fonts }}>
-              <option>Brand Campaign — $6,200 available</option>
+              {projects.map(p => <option key={p.id}>{p.name} — ${p.balance.toLocaleString()} available</option>)}
             </select>
             <div style={{ fontSize:11, color:C.muted, textTransform:"uppercase", letterSpacing:".06em", marginBottom:8 }}>Note</div>
             <input placeholder="e.g. Design milestone payout" style={{ width:"100%", border:`1px solid ${C.border}`, borderRadius:8, padding:"10px 12px", fontSize:13, outline:"none", background:C.bg, color:C.light, fontFamily:fonts }} />
@@ -213,14 +206,14 @@ function SendFunds() {
           <div style={{ background:C.card, border:`1px solid ${C.border}`, borderRadius:14, padding:20 }}>
             <div style={{ fontSize:11, fontWeight:600, color:C.muted, textTransform:"uppercase", letterSpacing:".08em", marginBottom:14 }}>Summary</div>
             {[
-              { label:"You send", value:`$${amount.toLocaleString()}` },
+              { label:"You send",    value:`$${amount.toLocaleString()}` },
               { label:"FUEL fee (1%)", value:`$${fee}` },
               { label:"They receive", value:`$${receives.toLocaleString()}`, gold:true },
-              { label:"Delivery", value:"Instant" },
+              { label:"Delivery",    value:"Instant" },
             ].map((row,i) => (
-              <div key={i} style={{ display:"flex", justifyContent:"space-between", fontSize:13, padding:"8px 0", borderBottom: i<3 ? `1px solid ${C.inner}` : "none" }}>
+              <div key={i} style={{ display:"flex", justifyContent:"space-between", fontSize:13, padding:"8px 0", borderBottom:i<3 ? `1px solid ${C.inner}` : "none" }}>
                 <span style={{ color:C.muted }}>{row.label}</span>
-                <span style={{ fontWeight:600, color: row.gold ? C.yellow : C.light }}>{row.value}</span>
+                <span style={{ fontWeight:600, color:row.gold ? C.yellow : C.light }}>{row.value}</span>
               </div>
             ))}
           </div>
@@ -236,14 +229,26 @@ function SendFunds() {
 
 export default function App() {
   const [page, setPage] = useState("Dashboard");
+  const [creating, setCreating] = useState(false);
+  const [projects, setProjects] = useState(defaultProjects);
+
+  function handleProjectDone(newProject) {
+    setProjects(prev => [...prev, { ...newProject, id: Date.now(), balance: 0, pct: 0 }]);
+    setCreating(false);
+    setPage("Projects");
+  }
+
   return (
     <div style={{ display:"grid", gridTemplateColumns:"220px 1fr", minHeight:"100vh", background:C.bg, fontFamily:fonts }}>
-      <Sidebar page={page} setPage={setPage} />
+      <Sidebar page={page} setPage={(p) => { setCreating(false); setPage(p); }} projects={projects} />
       <div>
-        {page==="Dashboard" && <Dashboard />}
-        {page==="Projects" && <Projects />}
-        {page==="Payments" && <SendFunds />}
-        {page==="Activity" && <div style={{ padding:32, color:C.dim, fontSize:14, fontFamily:fonts }}>Activity log coming soon</div>}
+        {creating
+          ? <CreateProject onDone={handleProjectDone} onCancel={() => setCreating(false)} />
+          : page==="Dashboard"  ? <Dashboard projects={projects} />
+          : page==="Projects"   ? <Projects projects={projects} onCreateProject={() => setCreating(true)} />
+          : page==="Payments"   ? <SendFunds projects={projects} />
+          : <div style={{ padding:32, color:C.dim, fontSize:14, fontFamily:fonts }}>Activity coming soon</div>
+        }
       </div>
     </div>
   );
