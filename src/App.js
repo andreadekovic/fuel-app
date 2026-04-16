@@ -28,7 +28,7 @@ function Sidebar({ page, setPage, projects }) {
   return (
     <div style={{ background:C.sidebar, borderRight:`1px solid ${C.border}`, padding:"24px 0", display:"flex", flexDirection:"column", fontFamily:fonts }}>
       <div style={{ display:"flex", alignItems:"center", gap:10, padding:"0 20px 32px" }}>
-        <div style={{ width:32, height:32, borderRadius:8, background:C.yellow, display:"flex", alignItems:"center", justifyContent:"center", fontSize:14 }}>▲</div>
+        <img src={require('./FUEL.png')} alt="fuel" style={{ width:32, height:32, borderRadius:8, objectFit:'cover' }} />
         <span style={{ fontSize:18, fontWeight:700, color:C.light, letterSpacing:"-.3px" }}>fuel</span>
       </div>
       <div style={{ fontSize:10, color:C.dim, letterSpacing:".1em", textTransform:"uppercase", padding:"0 20px 8px" }}>Main</div>
