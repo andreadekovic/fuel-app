@@ -8,7 +8,8 @@ const C = {
   light:"#F8F8FA", muted:"#666", dim:"#555",
 };
 
-const fonts = "'Plus Jakarta Sans', sans-serif";
+const fonts = "'Inter', sans-serif";
+const titleFonts = "'Syne', sans-serif";
 
 const defaultProjects = [
   { id:1, initials:"BC", name:"Brand Campaign", members:4, balance:6200, pct:67, split:"40/30/30", accent:"#FFDD76" },
@@ -72,7 +73,7 @@ function Dashboard({ projects }) {
       <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-end" }}>
         <div>
           <div style={{ fontSize:11, color:C.dim, textTransform:"uppercase", letterSpacing:".08em", marginBottom:4 }}>April 2026</div>
-          <h1 style={{ fontSize:28, fontWeight:700, color:C.light, letterSpacing:"-.5px", margin:0 }}>Dashboard</h1>
+          <h1 style={{ fontSize:28, fontWeight:700, color:C.light, letterSpacing:"-.5px", margin:0, fontFamily:titleFonts }}>Dashboard</h1>
         </div>
         <div style={{ display:"flex", gap:10 }}>
           <button style={{ background:"transparent", border:`1px solid ${C.border}`, borderRadius:8, padding:"9px 16px", fontSize:13, color:"#aaa", cursor:"pointer", fontFamily:fonts }}>Receive</button>
