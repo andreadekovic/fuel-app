@@ -43,8 +43,17 @@ const demoActivity = [
   { label:"Contributor payouts", amount:"$4,950.00", status:"Sent", color:"#E74C89" },
 ];
 
-function Sidebar({ page, setPage, projects }) {
-  const nav = ["Home","About","Dashboard","Projects","Payments","Activity"];
+function getInitials(name) {
+  return name
+    .split(" ")
+    .filter(Boolean)
+    .slice(0, 2)
+    .map(part => part[0]?.toUpperCase())
+    .join("") || "YN";
+}
+
+function Sidebar({ page, setPage, projects, user, onLogout }) {
+  const nav = user ? ["Home","About","Dashboard","Projects","Payments","Activity"] : ["Home","About","Login"];
   return (
     <div style={{ background:C.sidebar, borderRight:`1px solid ${C.border}`, padding:"24px 0", display:"flex", flexDirection:"column", fontFamily:fonts, height:"100vh", position:"sticky", top:0 }}>
       <div style={{ display:"flex", alignItems:"center", gap:10, padding:"0 20px 32px" }}>
@@ -70,17 +79,21 @@ function Sidebar({ page, setPage, projects }) {
         </div>
       ))}
       <div style={{ marginTop:"auto", padding:"16px 20px", borderTop:`1px solid ${C.border}`, display:"flex", alignItems:"center", gap:10 }}>
-        <div style={{ width:34, height:34, borderRadius:"50%", background:C.yellow, display:"flex", alignItems:"center", justifyContent:"center", fontSize:11, fontWeight:700, color:C.bg }}>YN</div>
-        <div>
-          <div style={{ fontSize:13, color:C.light, fontWeight:500, fontFamily:fonts }}>You</div>
-          <div style={{ fontSize:11, color:C.dim }}>Owner</div>
+        <div style={{ width:34, height:34, borderRadius:"50%", background:C.yellow, display:"flex", alignItems:"center", justifyContent:"center", fontSize:11, fontWeight:700, color:C.bg }}>{user ? user.initials : "?"}</div>
+        <div style={{ minWidth:0, flex:1 }}>
+          <div style={{ fontSize:13, color:C.light, fontWeight:500, fontFamily:fonts, whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis" }}>{user ? user.name : "Guest"}</div>
+          <div style={{ fontSize:11, color:C.dim }}>{user ? user.provider : "Not signed in"}</div>
         </div>
+        {user
+          ? <button className="sidebar-auth-button" onClick={onLogout}>Sign out</button>
+          : <button className="sidebar-auth-button" onClick={() => setPage("Login")}>Log in</button>
+        }
       </div>
     </div>
   );
 }
 
-function Home({ setPage, onCreateProject }) {
+function Home({ setPage, onCreateProject, user }) {
   return (
     <main className="home-page">
       <section className="home-hero">
@@ -101,7 +114,7 @@ function Home({ setPage, onCreateProject }) {
           <h1>FUEL</h1>
           <p>FUEL is project payout automation for distributed teams. Receive one client payment, split it automatically, and pay collaborators globally.</p>
           <div className="home-actions">
-            <button className="primary-action" onClick={onCreateProject}>Create project</button>
+            <button className="primary-action" onClick={user ? onCreateProject : () => setPage("Login")}>{user ? "Create project" : "Log in to start"}</button>
             <button className="secondary-action" onClick={() => setPage("About")}>View demo flow</button>
           </div>
         </div>
@@ -114,6 +127,61 @@ function Home({ setPage, onCreateProject }) {
           </div>
         ))}
       </section>
+    </main>
+  );
+}
+
+function Login({ onLogin }) {
+  const [username, setUsername] = useState("");
+  const cleanName = username.trim();
+
+  function continueWithUsername(event) {
+    event.preventDefault();
+    if (!cleanName) return;
+    onLogin({
+      name: cleanName,
+      initials: getInitials(cleanName),
+      provider: "Username",
+    });
+  }
+
+  function continueWithGoogle() {
+    onLogin({
+      name: "Google Demo User",
+      email: "google.demo@fuel.test",
+      initials: "GD",
+      provider: "Google",
+    });
+  }
+
+  return (
+    <main className="login-page">
+      <section className="login-panel">
+        <div className="home-eyebrow">Welcome back</div>
+        <h1>Log in to FUEL</h1>
+        <p>Use a username for the prototype, or continue with the demo Google path.</p>
+        <button className="google-login-button" onClick={continueWithGoogle}>
+          <span>G</span>
+          Continue with Google
+        </button>
+        <div className="login-divider"><span>or</span></div>
+        <form onSubmit={continueWithUsername}>
+          <label htmlFor="username">Username</label>
+          <input
+            id="username"
+            value={username}
+            onChange={event => setUsername(event.target.value)}
+            placeholder="e.g. Andrea"
+          />
+          <button className="primary-action" type="submit" disabled={!cleanName}>Continue</button>
+        </form>
+      </section>
+      <aside className="login-preview">
+        <div className="panel-title">Session preview</div>
+        <div className="preview-avatar">{cleanName ? getInitials(cleanName) : "F"}</div>
+        <strong>{cleanName || "Your workspace"}</strong>
+        <span>Projects, splits, and payout demos unlock after login.</span>
+      </aside>
     </main>
   );
 }
@@ -376,6 +444,14 @@ export default function App() {
   const [page, setPage] = useState("Home");
   const [creating, setCreating] = useState(false);
   const [projects, setProjects] = useState(defaultProjects);
+  const [user, setUser] = useState(() => {
+    try {
+      const saved = window.localStorage.getItem("fuel-user");
+      return saved ? JSON.parse(saved) : null;
+    } catch {
+      return null;
+    }
+  });
 
   function handleProjectDone(newProject) {
     setProjects(prev => [...prev, { ...newProject, id:Date.now(), balance:0, pct:0 }]);
@@ -383,16 +459,41 @@ export default function App() {
     setPage("Projects");
   }
 
+  function handleLogin(nextUser) {
+    setUser(nextUser);
+    window.localStorage.setItem("fuel-user", JSON.stringify(nextUser));
+    setCreating(false);
+    setPage("Dashboard");
+  }
+
+  function handleLogout() {
+    setUser(null);
+    window.localStorage.removeItem("fuel-user");
+    setCreating(false);
+    setPage("Home");
+  }
+
+  function startCreateProject() {
+    if (!user) {
+      setPage("Login");
+      return;
+    }
+    setCreating(true);
+  }
+
+  const protectedPage = ["Dashboard","Projects","Payments","Activity"].includes(page);
+
   return (
     <div style={{ display:"grid", gridTemplateColumns:"220px 1fr", minHeight:"100vh", background:C.bg, fontFamily:fonts }}>
-      <Sidebar page={page} setPage={(p) => { setCreating(false); setPage(p); }} projects={projects} />
+      <Sidebar page={page} setPage={(p) => { setCreating(false); setPage(p); }} projects={projects} user={user} onLogout={handleLogout} />
       <div>
         {creating
           ? <CreateProject onDone={handleProjectDone} onCancel={() => setCreating(false)} />
-          : page==="Home" ? <Home setPage={setPage} onCreateProject={() => setCreating(true)} />
+          : page==="Home" ? <Home setPage={setPage} onCreateProject={startCreateProject} user={user} />
           : page==="About" ? <About />
+          : page==="Login" || (!user && protectedPage) ? <Login onLogin={handleLogin} />
           : page==="Dashboard" ? <Dashboard projects={projects} />
-          : page==="Projects"  ? <Projects projects={projects} onCreateProject={() => setCreating(true)} />
+          : page==="Projects"  ? <Projects projects={projects} onCreateProject={startCreateProject} />
           : page==="Payments"  ? <SendFunds projects={projects} />
           : <div style={{ padding:32, color:C.dim, fontSize:14, fontFamily:fonts }}>Activity coming soon</div>
         }
