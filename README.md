@@ -1,70 +1,84 @@
-# Getting Started with Create React App
+# FUEL
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+FUEL is project payout automation for distributed teams. Receive one client payment, split it automatically, and pay collaborators globally.
 
-## Available Scripts
+This repo contains the current React prototype for the FUEL product concept. The app is intentionally fiat-first: users see projects, balances, splits, activity, and payout statuses while stablecoin/Solana settlement stays behind the scenes.
 
-In the project directory, you can run:
+## What It Does Today
 
-### `npm start`
+- Landing page with FUEL positioning and demo flow entry point.
+- Prototype login with username login and demo Google login.
+- Dashboard with project balances and local transaction metrics.
+- Project creation with collaborator split rules.
+- Receive funds simulation for a client payment.
+- Split preview showing platform fee and each recipient payout.
+- Payout confirmation that writes status history.
+- Activity feed with persisted transactions.
+- Local browser persistence for projects, user session, and transactions.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Prototype Scope
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+This is not a production payments app yet. The current version does not move real money, perform real Google OAuth, or create production Solana wallets. It is a clickable MVP meant to validate the workflow:
 
-### `npm test`
+1. Create a project.
+2. Add contributors and payout percentages.
+3. Simulate receiving client funds.
+4. Preview the automatic split.
+5. Confirm payouts.
+6. Review activity and payout status history.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Tech Stack
 
-### `npm run build`
+- React
+- Create React App / react-scripts
+- Browser `localStorage` for prototype persistence
+- Demo Solana wallet helper for devnet-style wallet addresses
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Local Setup
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Install dependencies:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```bash
+npm install
+```
 
-### `npm run eject`
+Start the development server:
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+```bash
+npm start
+```
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Run tests:
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+```bash
+npm test
+```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+Create a production build:
 
-## Learn More
+```bash
+npm run build
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Auth Notes
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+The current Google login button is a demo path, not real Google OAuth. Real auth should be added through Firebase Auth, Supabase Auth, Auth0, or Google Identity Services with a configured client ID.
 
-### Code Splitting
+## Persistence Notes
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+The prototype persists these objects in browser localStorage:
 
-### Analyzing the Bundle Size
+- `fuel-user`
+- `fuel-projects`
+- `fuel-transactions`
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+This is enough for demos and validation. A later production version should move persistence to Supabase, Firebase, or a dedicated backend with proper auth, auditing, and payment state guarantees.
 
-### Making a Progressive Web App
+## Next Production Steps
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- Replace demo auth with real authentication.
+- Add backend persistence and transaction state machines.
+- Integrate regulated fiat payment and payout providers.
+- Integrate stablecoin settlement through compliant infrastructure.
+- Add KYC/KYB, compliance screening, and tax/reporting workflows.
+- Add real accounting exports and project-level audit trails.

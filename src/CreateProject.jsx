@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { createProjectWallet } from "./solana";
 
 const C = {
   bg:"#1E1D1D", card:"#111010", border:"#2a2a2a", inner:"#1e1e1e",
@@ -9,11 +10,6 @@ const fonts = "'Inter', sans-serif";
 const titleFonts = "'Syne', sans-serif";
 const COLORS = ["#FFDD76","#E74C89","#FEA55B","#60a5fa","#a78bfa"];
 const memberColors = ["#FFDD76","#E74C89","#FEA55B","#60a5fa","#a78bfa"];
-
-function generateWallet() {
-  const chars = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz123456789";
-  return Array.from({length:44}, () => chars[Math.floor(Math.random()*chars.length)]).join("");
-}
 
 export default function CreateProject({ onDone, onCancel }) {
   const [step, setStep] = useState(1);
@@ -43,13 +39,12 @@ export default function CreateProject({ onDone, onCancel }) {
     setNewEmail("");
   }
 
-  function handleCreateWallet() {
+  async function handleCreateWallet() {
     setLoading(true);
-    setTimeout(() => {
-      setWallet({ address: generateWallet() });
-      setLoading(false);
-      setStep(3);
-    }, 1200);
+    const projectWallet = await createProjectWallet();
+    setWallet(projectWallet);
+    setLoading(false);
+    setStep(3);
   }
 
   function handleLaunch() {
@@ -59,6 +54,7 @@ export default function CreateProject({ onDone, onCancel }) {
       accent: form.color,
       members: members.length,
       split: members.map(m => m.pct+"%").join("/"),
+      splitMembers: members.map(m => ({ ...m, role:m.name.includes("owner") ? "Owner" : "Contributor" })),
       walletAddress: wallet?.address,
     });
   }
