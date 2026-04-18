@@ -29,9 +29,9 @@ function Sidebar({ page, setPage, projects }) {
   return (
     <div style={{ background:C.sidebar, borderRight:`1px solid ${C.border}`, padding:"24px 0", display:"flex", flexDirection:"column", fontFamily:fonts }}>
       <div style={{ display:"flex", alignItems:"center", gap:10, padding:"0 20px 32px" }}>
-        <img src={require('./FUEL.png')} alt="fuel" style={{ width:32, height:32, borderRadius:8, objectFit:'cover' }} />
-        <span style={{ fontSize:18, fontWeight:700, color:C.light, letterSpacing:"-.3px" }}>fuel</span>
-      </div>
+      <div style={{ width:32, height:32, borderRadius:8, background:"linear-gradient(135deg, #FEA55B, #E74C89)", display:"flex", alignItems:"center", justifyContent:"center", fontSize:16, fontWeight:800, color:"white", fontFamily:titleFonts }}>F</div>
+        <span style={{ fontSize:18, fontWeight:700, color:C.light, letterSpacing:"-.3px", fontFamily:titleFonts }}>fuel</span>
+    </div>
       <div style={{ fontSize:10, color:C.dim, letterSpacing:".1em", textTransform:"uppercase", padding:"0 20px 8px" }}>Main</div>
       {nav.map(item => (
         <div key={item} onClick={() => setPage(item)}
