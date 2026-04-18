@@ -24,8 +24,27 @@ const activity = [
   { type:"in",    label:"Invoice paid · Dev Sprint", date:"Apr 11",         amount:"+$3,200", color:"#FFDD76" },
 ];
 
+const landingMetrics = [
+  { label:"One client payment", value:"$5K" },
+  { label:"Auto split rules", value:"3 ways" },
+  { label:"Global payout rail", value:"USDC" },
+];
+
+const demoRecipients = [
+  { name:"Ana Navarro", role:"Design lead", initials:"AN", pct:45, color:"#FFDD76" },
+  { name:"James K.", role:"Developer", initials:"JK", pct:30, color:"#E74C89" },
+  { name:"Maya Chen", role:"Producer", initials:"MC", pct:25, color:"#FEA55B" },
+];
+
+const demoActivity = [
+  { label:"Client payment simulated", amount:"+$5,000.00", status:"Completed", color:"#FFDD76" },
+  { label:"FUEL platform fee", amount:"-$50.00", status:"Completed", color:"#888" },
+  { label:"Split calculation locked", amount:"3 payouts", status:"Completed", color:"#FEA55B" },
+  { label:"Contributor payouts", amount:"$4,950.00", status:"Sent", color:"#E74C89" },
+];
+
 function Sidebar({ page, setPage, projects }) {
-  const nav = ["Dashboard","Projects","Payments","Activity"];
+  const nav = ["Home","About","Dashboard","Projects","Payments","Activity"];
   return (
     <div style={{ background:C.sidebar, borderRight:`1px solid ${C.border}`, padding:"24px 0", display:"flex", flexDirection:"column", fontFamily:fonts, height:"100vh", position:"sticky", top:0 }}>
       <div style={{ display:"flex", alignItems:"center", gap:10, padding:"0 20px 32px" }}>
@@ -58,6 +77,131 @@ function Sidebar({ page, setPage, projects }) {
         </div>
       </div>
     </div>
+  );
+}
+
+function Home({ setPage, onCreateProject }) {
+  return (
+    <main className="home-page">
+      <section className="home-hero">
+        <div className="payment-scene" aria-hidden="true">
+          <div className="rail rail-one" />
+          <div className="rail rail-two" />
+          <div className="rail rail-three" />
+          <div className="scene-node client-node">Client</div>
+          <div className="scene-node fuel-node">FUEL</div>
+          <div className="scene-node team-node">Team</div>
+          <div className="payment-pulse pulse-one">$5,000</div>
+          <div className="payment-pulse pulse-two">45%</div>
+          <div className="payment-pulse pulse-three">30%</div>
+          <div className="payment-pulse pulse-four">25%</div>
+        </div>
+        <div className="home-copy">
+          <div className="home-eyebrow">Project payout automation</div>
+          <h1>FUEL</h1>
+          <p>FUEL is project payout automation for distributed teams. Receive one client payment, split it automatically, and pay collaborators globally.</p>
+          <div className="home-actions">
+            <button className="primary-action" onClick={onCreateProject}>Create project</button>
+            <button className="secondary-action" onClick={() => setPage("About")}>View demo flow</button>
+          </div>
+        </div>
+      </section>
+      <section className="home-proof">
+        {landingMetrics.map(metric => (
+          <div className="proof-block" key={metric.label}>
+            <span>{metric.label}</span>
+            <strong>{metric.value}</strong>
+          </div>
+        ))}
+      </section>
+    </main>
+  );
+}
+
+function About() {
+  const [run, setRun] = useState(0);
+  const payment = 5000;
+  const fee = 50;
+  const payoutPool = payment - fee;
+
+  return (
+    <main className="about-page">
+      <section className="about-header">
+        <div>
+          <div className="home-eyebrow">Demo flow</div>
+          <h1>From one client payment to global team payouts.</h1>
+        </div>
+        <button className="primary-action" onClick={() => setRun(run + 1)}>Simulate $5,000 client payment</button>
+      </section>
+
+      <section className="flow-stage" key={run}>
+        <div className="flow-lane">
+          <div className="flow-step step-one">
+            <span>01</span>
+            <strong>Client payment</strong>
+            <em>$5,000.00 received</em>
+          </div>
+          <div className="flow-step step-two">
+            <span>02</span>
+            <strong>Split calculation</strong>
+            <em>45 / 30 / 25</em>
+          </div>
+          <div className="flow-step step-three">
+            <span>03</span>
+            <strong>Platform fee</strong>
+            <em>$50.00</em>
+          </div>
+          <div className="flow-step step-four">
+            <span>04</span>
+            <strong>Payouts</strong>
+            <em>Pending → sent → completed</em>
+          </div>
+        </div>
+
+        <div className="about-grid">
+          <div className="split-panel">
+            <div className="panel-title">Recipient payouts</div>
+            {demoRecipients.map((recipient, index) => {
+              const amount = payoutPool * recipient.pct / 100;
+              return (
+                <div className={`recipient-row recipient-${index + 1}`} key={recipient.email || recipient.name}>
+                  <div className="recipient-mark" style={{ background:recipient.color }}>{recipient.initials}</div>
+                  <div>
+                    <strong>{recipient.name}</strong>
+                    <span>{recipient.role} · {recipient.pct}%</span>
+                  </div>
+                  <em>${amount.toLocaleString(undefined, { minimumFractionDigits:2, maximumFractionDigits:2 })}</em>
+                </div>
+              );
+            })}
+          </div>
+
+          <div className="status-panel">
+            <div className="panel-title">Payout status</div>
+            {["Pending","Sent","Completed"].map((status, index) => (
+              <div className={`status-row status-${index + 1}`} key={status}>
+                <span />
+                <strong>{status}</strong>
+              </div>
+            ))}
+          </div>
+
+          <div className="activity-panel">
+            <div className="panel-title">Activity feed</div>
+            {demoActivity.map((item, index) => (
+              <div className={`activity-row activity-${index + 1}`} key={item.label}>
+                <span style={{ color:item.color }}>●</span>
+                <div>
+                  <strong>{item.label}</strong>
+                  <em>{item.status}</em>
+                </div>
+                <b>{item.amount}</b>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    </main>
   );
 }
 
@@ -229,7 +373,7 @@ function SendFunds({ projects }) {
 }
 
 export default function App() {
-  const [page, setPage] = useState("Dashboard");
+  const [page, setPage] = useState("Home");
   const [creating, setCreating] = useState(false);
   const [projects, setProjects] = useState(defaultProjects);
 
@@ -245,6 +389,8 @@ export default function App() {
       <div>
         {creating
           ? <CreateProject onDone={handleProjectDone} onCancel={() => setCreating(false)} />
+          : page==="Home" ? <Home setPage={setPage} onCreateProject={() => setCreating(true)} />
+          : page==="About" ? <About />
           : page==="Dashboard" ? <Dashboard projects={projects} />
           : page==="Projects"  ? <Projects projects={projects} onCreateProject={() => setCreating(true)} />
           : page==="Payments"  ? <SendFunds projects={projects} />
