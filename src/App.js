@@ -3,7 +3,7 @@ import CreateProject from "./CreateProject";
 import "./App.css";
 
 const C = {
-  bg:"#0F8A3B", sidebar:"#111010", card:"#111010",
+  bg:"#1E1D1D", sidebar:"#111010", card:"#111010",
   border:"#2a2a2a", inner:"#1e1e1e",
   yellow:"#FFDD76", pink:"#E74C89", orange:"#FEA55B",
   light:"#F8F8FA", muted:"#666", dim:"#555",
