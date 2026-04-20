@@ -4,7 +4,8 @@ import { createProjectWallet } from "./solana";
 const fonts = "'DM Sans', sans-serif";
 const titleFonts = "'DM Sans', sans-serif";
 const C = {
-  bg:"#0F0B2A", card:"#1A0A12", border:"#2a1a2e", inner:"#150818",
+  bg:"#0F0B2A", sidebar:"#1A0A12", card:"#1A0A12",
+  border:"#2a1a2e", inner:"#150818",
   yellow:"#F5E642", pink:"#4B4BD4", orange:"#2B8EF0",
   light:"#F8F8FA", muted:"#888", dim:"#555",
 };
