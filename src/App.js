@@ -4,8 +4,8 @@ import "./App.css";
 
 const C = {
   bg:"#0F0B2A", sidebar:"#1A0A12", card:"#1A0A12",
-  border:"#2a1a2e", inner:"#150818",
-  yellow:"#F5E642", pink:"#4B4BD4", orange:"#2B8EF0",
+  border:"rgb(42, 26, 46)", inner:"#150818",
+  yellow:"#49b0ff", pink:"#4B4BD4", orange:"#2B8EF0",
   light:"#F8F8FA", muted:"#888", dim:"#555",
 };
 const fonts = "'DM Sans', sans-serif";

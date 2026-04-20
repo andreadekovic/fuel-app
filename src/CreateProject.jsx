@@ -4,13 +4,13 @@ import { createProjectWallet } from "./solana";
 const fonts = "'DM Sans', sans-serif";
 const titleFonts = "'DM Sans', sans-serif";
 const C = {
-  bg:"#0F0B2A", sidebar:"#1A0A12", card:"#1A0A12",
-  border:"#2a1a2e", inner:"#150818",
-  yellow:"#F5E642", pink:"#4B4BD4", orange:"#2B8EF0",
+  bg:"#1c0f13", sidebar:"#1c0f13", card:"#1A0A12",
+  border:"#1c0f13", inner:"#1c0f13",
+  yellow:"#49b0ff", pink:"#4B4BD4", orange:"#2B8EF0",
   light:"#F8F8FA", muted:"#888", dim:"#555",
 };
-const COLORS = ["#F5E642","#4B4BD4","#2B8EF0","#60a5fa","#a78bfa"];
-const memberColors = ["#F5E642","#4B4BD4","#2B8EF0","#60a5fa","#a78bfa"];
+const COLORS = ["#49b0ff","#4B4BD4","rgb(43, 142, 240)","#60a5fa","#a78bfa"];
+const memberColors = ["#49b0ff","#4B4BD4","#2B8EF0","#60a5fa","#a78bfa"];
 
 function generateWallet() {
   const chars = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz123456789";
