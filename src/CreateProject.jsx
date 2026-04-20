@@ -1,11 +1,6 @@
 import { useState } from "react";
 import { createProjectWallet } from "./solana";
 
-const C = {
-  bg:"#1E1D1D", card:"#111010", border:"#2a2a2a", inner:"#1e1e1e",
-  yellow:"#FFDD76", pink:"#E74C89", orange:"#FEA55B",
-  light:"#F8F8FA", muted:"#666", dim:"#555",
-};
 const fonts = "'DM Sans', sans-serif";
 const titleFonts = "'DM Sans', sans-serif";
 const C = {
