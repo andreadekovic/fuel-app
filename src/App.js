@@ -3,13 +3,13 @@ import CreateProject from "./CreateProject";
 import "./App.css";
 
 const C = {
-  bg:"#1E1D1D", sidebar:"#111010", card:"#111010",
-  border:"#2a2a2a", inner:"#1e1e1e",
-  yellow:"#FFDD76", pink:"#E74C89", orange:"#FEA55B",
-  light:"#F8F8FA", muted:"#666", dim:"#555",
+  bg:"#0F0B2A", sidebar:"#1A0A12", card:"#1A0A12",
+  border:"#2a1a2e", inner:"#150818",
+  yellow:"#F5E642", pink:"#4B4BD4", orange:"#2B8EF0",
+  light:"#F8F8FA", muted:"#888", dim:"#555",
 };
-const fonts = "'Inter', sans-serif";
-const titleFonts = "'Syne', sans-serif";
+const fonts = "'DM Sans', sans-serif";
+const titleFonts = "'DM Sans', sans-serif";
 const PROJECTS_KEY = "fuel-projects";
 const TRANSACTIONS_KEY = "fuel-transactions";
 const USER_KEY = "fuel-user";

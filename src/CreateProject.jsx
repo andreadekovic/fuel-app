@@ -6,9 +6,14 @@ const C = {
   yellow:"#FFDD76", pink:"#E74C89", orange:"#FEA55B",
   light:"#F8F8FA", muted:"#666", dim:"#555",
 };
-const fonts = "'Inter', sans-serif";
-const titleFonts = "'Syne', sans-serif";
-const COLORS = ["#FFDD76","#E74C89","#FEA55B","#60a5fa","#a78bfa"];
+const fonts = "'DM Sans', sans-serif";
+const titleFonts = "'DM Sans', sans-serif";
+const C = {
+  bg:"#0F0B2A", sidebar:"#1A0A12", card:"#1A0A12",
+  border:"#2a1a2e", inner:"#150818",
+  yellow:"#F5E642", pink:"#4B4BD4", orange:"#2B8EF0",
+  light:"#F8F8FA", muted:"#888", dim:"#555",
+};
 const memberColors = ["#FFDD76","#E74C89","#FEA55B","#60a5fa","#a78bfa"];
 
 export default function CreateProject({ onDone, onCancel }) {
