@@ -13,8 +13,8 @@ const memberColors = ["#C8FF5A","#7D8BFF","#58D5C9","#60a5fa","#a78bfa"];
 
 export default function CreateProject({ onDone, onCancel }) {
   const [step, setStep] = useState(1);
-  const [form, setForm] = useState({ name:"", description:"", category:"", color:"#FFDD76", currency:"USD", trigger:"Automatic on receipt" });
-  const [members, setMembers] = useState([{ name:"You (owner)", email:"you@email.com", pct:100, color:"#FFDD76", initials:"YN" }]);
+  const [form, setForm] = useState({ name:"", description:"", category:"", color:"#C8FF5A", currency:"USD", trigger:"Automatic on receipt" });
+  const [members, setMembers] = useState([{ name:"You (owner)", email:"you@email.com", pct:100, color:"#C8FF5A", initials:"YN" }]);
   const [newEmail, setNewEmail] = useState("");
   const [wallet, setWallet] = useState(null);
   const [loading, setLoading] = useState(false);

@@ -53,6 +53,17 @@ const demoActivity = [
   { label:"Contributor payouts", amount:"$4,950.00", status:"Sent", color:"#E74C89" },
 ];
 
+const pageIcons = {
+  Home:"◌",
+  About:"◎",
+  Login:"→",
+  Dashboard:"◫",
+  Projects:"◇",
+  Receive:"↓",
+  Payments:"↑",
+  Activity:"↺",
+};
+
 function loadLocal(key, fallback) {
   try {
     const saved = window.localStorage.getItem(key);
@@ -157,8 +168,8 @@ function Sidebar({ page, setPage, projects, user, onLogout }) {
               color: page===item ? C.light : C.muted,
             }}
           >
-            <div style={{ width:6, height:6, borderRadius:"50%", background:page===item ? C.yellow : "currentColor", flexShrink:0 }} />
-            {item}
+            <span className="sidebar-item-icon">{pageIcons[item]}</span>
+            <span className="sidebar-item-label">{item}</span>
           </button>
         ))}
       </nav>
@@ -186,22 +197,38 @@ function Sidebar({ page, setPage, projects, user, onLogout }) {
   );
 }
 
+function AppTopbar({ page, user, projects, transactions }) {
+  const totalBalance = projects.reduce((sum, project) => sum + Number(project.balance || 0), 0);
+  const completedPayouts = transactions.filter(tx => tx.type === "payout").length;
+  return (
+    <div className="app-topbar">
+      <div>
+        <div className="app-topbar-kicker">Workspace</div>
+        <div className="app-topbar-title">{page}</div>
+      </div>
+      <div className="app-topbar-right">
+        <div className="topbar-chip">
+          <span className="chip-dot live" />
+          Solana rail active
+        </div>
+        <div className="topbar-chip">
+          <span className="chip-metric">{formatMoney(totalBalance)}</span>
+          Available
+        </div>
+        <div className="topbar-chip">
+          <span className="chip-metric">{completedPayouts}</span>
+          Payouts cleared
+        </div>
+        <div className="topbar-user">{user.initials}</div>
+      </div>
+    </div>
+  );
+}
+
 function Home({ setPage, onCreateProject, user }) {
   return (
     <main className="home-page">
       <section className="home-hero">
-        <div className="payment-scene" aria-hidden="true">
-          <div className="rail rail-one" />
-          <div className="rail rail-two" />
-          <div className="rail rail-three" />
-          <div className="scene-node client-node">Client</div>
-          <div className="scene-node fuel-node">FUEL</div>
-          <div className="scene-node team-node">Team</div>
-          <div className="payment-pulse pulse-one">$5,000</div>
-          <div className="payment-pulse pulse-two">45%</div>
-          <div className="payment-pulse pulse-three">30%</div>
-          <div className="payment-pulse pulse-four">25%</div>
-        </div>
         <div className="home-copy">
           <div className="home-eyebrow">Project payout automation</div>
           <h1>FUEL</h1>
@@ -209,6 +236,62 @@ function Home({ setPage, onCreateProject, user }) {
           <div className="home-actions">
             <button className="primary-action" onClick={user ? onCreateProject : () => setPage("Login")}>{user ? "Create project" : "Log in to start"}</button>
             <button className="secondary-action" onClick={() => setPage("About")}>View demo flow</button>
+          </div>
+          <div className="hero-trust-row">
+            <span>Agencies</span>
+            <span>Studios</span>
+            <span>Distributed teams</span>
+          </div>
+        </div>
+        <div className="hero-stage">
+          <div className="payment-scene" aria-hidden="true">
+            <div className="rail rail-one" />
+            <div className="rail rail-two" />
+            <div className="rail rail-three" />
+            <div className="scene-node client-node">Client</div>
+            <div className="scene-node fuel-node">FUEL</div>
+            <div className="scene-node team-node">Team</div>
+            <div className="payment-pulse pulse-one">$5,000</div>
+            <div className="payment-pulse pulse-two">45%</div>
+            <div className="payment-pulse pulse-three">30%</div>
+            <div className="payment-pulse pulse-four">25%</div>
+          </div>
+          <div className="hero-console">
+            <div className="console-card primary">
+              <div className="console-label">Incoming payment</div>
+              <strong>$5,000.00</strong>
+              <span>Brand Campaign · Client paid</span>
+            </div>
+            <div className="console-grid">
+              <div className="console-card">
+                <div className="console-label">Platform fee</div>
+                <strong>$50.00</strong>
+                <span>1.0% automated fee</span>
+              </div>
+              <div className="console-card">
+                <div className="console-label">Net payout pool</div>
+                <strong>$4,950.00</strong>
+                <span>Ready to route instantly</span>
+              </div>
+            </div>
+            <div className="console-card roster">
+              <div className="console-label">Live split rules</div>
+              {defaultSplitMembers.map(member => (
+                <div className="console-row" key={member.email}>
+                  <div className="console-person">
+                    <span className="console-badge" style={{ background:member.color }}>{member.initials}</span>
+                    <div>
+                      <strong>{member.name}</strong>
+                      <span>{member.role}</span>
+                    </div>
+                  </div>
+                  <div className="console-amount">
+                    <strong>{member.pct}%</strong>
+                    <span>{formatMoney(4950 * member.pct / 100)}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
@@ -371,6 +454,7 @@ function Dashboard({ projects, transactions, setPage }) {
   const totalReceived = transactions.filter(tx => tx.type === "in").reduce((sum, tx) => sum + Number(tx.amount || 0), 0);
   const totalPaid = Math.abs(transactions.filter(tx => tx.type === "payout").reduce((sum, tx) => sum + Number(tx.amount || 0), 0));
   const memberCount = projects.reduce((sum, project) => sum + (project.splitMembers?.length || project.members || 0), 0);
+  const nextProject = projects[0];
   const metrics = [
     { label:"Total balance", value:formatMoney(totalBalance), sub:"Across active projects", accent:true },
     { label:"Received", value:formatMoney(totalReceived), sub:"Tracked in local activity" },
@@ -391,6 +475,32 @@ function Dashboard({ projects, transactions, setPage }) {
           <button onClick={() => setPage("Payments")} className="primary-action">Send funds</button>
         </div>
       </div>
+      <section className="command-deck">
+        <div className="command-primary">
+          <div className="deck-kicker">Workspace liquidity</div>
+          <div className="deck-balance">{formatMoney(totalBalance)}</div>
+          <p>One shared layer for receiving client funds, locking split logic, and clearing payouts with a clean audit trail.</p>
+          <div className="deck-actions">
+            <button className="primary-action" onClick={() => setPage("Receive")}>Receive payment</button>
+            <button className="secondary-action" onClick={() => setPage("Activity")}>Open activity</button>
+          </div>
+        </div>
+        <div className="command-secondary">
+          <div className="deck-kicker">Next project rail</div>
+          <strong>{nextProject?.name}</strong>
+          <span>{nextProject?.splitMembers.length} collaborators · {nextProject?.split} split</span>
+          <div className="mini-stack">
+            <div className="mini-stack-row">
+              <span>Available now</span>
+              <strong>{formatMoney(nextProject?.balance || 0)}</strong>
+            </div>
+            <div className="mini-stack-row">
+              <span>Recent payment</span>
+              <strong>{transactions.find(tx => tx.projectId === nextProject?.id)?.displayAmount || "+$0.00"}</strong>
+            </div>
+          </div>
+        </div>
+      </section>
       <div className="metric-grid">
         {metrics.map(m => (
           <div key={m.label} className={`metric-card ${m.accent ? "accent" : ""}`}>
@@ -490,14 +600,34 @@ function ReceiveFunds({ projects, onSimulateFunds, onConfirmPayouts, lastSplit }
   }
 
   return (
-    <div style={{ padding:32, fontFamily:fonts }}>
-      <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-end", marginBottom:24 }}>
+    <div className="page-shell">
+      <div className="page-header">
         <div>
-          <div style={{ fontSize:11, color:C.dim, textTransform:"uppercase", letterSpacing:".08em", marginBottom:4 }}>Receive funds</div>
-          <h1 style={{ fontSize:32, fontWeight:800, color:C.light, letterSpacing:"-.5px", margin:0, fontFamily:titleFonts }}>Simulate client payment</h1>
+          <div className="page-kicker">Receive funds</div>
+          <h1 className="page-title">Simulate client payment</h1>
         </div>
-        <button onClick={handleSimulate} style={{ background:C.yellow, color:C.bg, border:"none", borderRadius:8, padding:"10px 18px", fontSize:13, fontWeight:800, cursor:"pointer", fontFamily:fonts }}>Simulate {formatMoney(Number(amount || 0))} client payment</button>
+        <button onClick={handleSimulate} className="primary-action">Simulate {formatMoney(Number(amount || 0))}</button>
       </div>
+      <section className="receive-hero">
+        <div>
+          <div className="deck-kicker">Payment rail</div>
+          <strong>Capture a client payment once, then let FUEL calculate every payout before money moves.</strong>
+        </div>
+        <div className="receive-hero-stats">
+          <div>
+            <span>Platform fee</span>
+            <strong>1.0%</strong>
+          </div>
+          <div>
+            <span>Settlement mode</span>
+            <strong>Stablecoin rail</strong>
+          </div>
+          <div>
+            <span>Payout states</span>
+            <strong>Pending → Completed</strong>
+          </div>
+        </div>
+      </section>
 
       <div className="receive-grid">
         <section className="receive-panel">
@@ -652,11 +782,19 @@ function ActivityPage({ transactions }) {
   const latestPayout = transactions.find(tx => tx.type === "payout" && tx.history?.length);
 
   return (
-    <div style={{ padding:32, fontFamily:fonts }}>
-      <div style={{ marginBottom:24 }}>
-        <div style={{ fontSize:11, color:C.dim, textTransform:"uppercase", letterSpacing:".08em", marginBottom:4 }}>Activity</div>
-        <h1 style={{ fontSize:32, fontWeight:800, color:C.light, letterSpacing:"-.5px", margin:0, fontFamily:titleFonts }}>Status history</h1>
+    <div className="page-shell">
+      <div className="page-header">
+        <div>
+          <div className="page-kicker">Activity</div>
+          <h1 className="page-title">Status history</h1>
+        </div>
       </div>
+      <section className="receive-hero compact">
+        <div>
+          <div className="deck-kicker">Audit trail</div>
+          <strong>Every simulated receipt, fee, payout batch, and delivery state lives in one running ledger.</strong>
+        </div>
+      </section>
       <div className="activity-page-grid">
         <section className="receive-panel">
           <div className="panel-title">Activity feed</div>
@@ -813,11 +951,13 @@ export default function App() {
   }
 
   const protectedPage = ["Dashboard","Projects","Receive","Payments","Activity"].includes(page);
+  const showAppChrome = user && (protectedPage || creating);
 
   return (
     <div className="app-shell" style={{ display:"grid", gridTemplateColumns:"240px 1fr", minHeight:"100vh", background:C.bg, fontFamily:fonts }}>
       <Sidebar page={page} setPage={(p) => { setCreating(false); setPage(p); }} projects={projects} user={user} onLogout={handleLogout} />
       <div className="app-main">
+        {showAppChrome && <AppTopbar page={creating ? "Create Project" : page} user={user} projects={projects} transactions={transactions} />}
         {creating
           ? <CreateProject onDone={handleProjectDone} onCancel={() => setCreating(false)} />
           : page==="Home" ? <Home setPage={setPage} onCreateProject={startCreateProject} user={user} />
