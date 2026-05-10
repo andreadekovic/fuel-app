@@ -3,42 +3,43 @@ import CreateProject from "./CreateProject";
 import "./App.css";
 
 const C = {
-  bg:"#20091A", sidebar:"#1F1252", card:"#241535",
-  border:"rgba(255,255,255,.08)", inner:"rgba(255,255,255,.06)",
-  yellow:"#1182EB", pink:"#3A47B9", orange:"#FFF132",
+  bg:"#080B14", sidebar:"#060912", card:"#0F1525",
+  border:"rgba(255,255,255,.06)", inner:"rgba(255,255,255,.06)",
+  yellow:"#7E2EFF", pink:"#41ECFF", orange:"#41ECFF",
   light:"#F5F7F7", muted:"#8C979C", dim:"#5A6468",
   onAccent:"#F5F7F7",
 };
-const fonts = "'DM Sans', sans-serif";
-const titleFonts = "'DM Sans', sans-serif";
+const fonts = "'IBM Plex Sans', system-ui, sans-serif";
+const titleFonts = "'Sora', system-ui, sans-serif";
+const logoFill = "linear-gradient(135deg, #7E2EFF, #5B1FD9)";
 const PROJECTS_KEY = "fuel-projects";
 const TRANSACTIONS_KEY = "fuel-transactions";
 const USER_KEY = "fuel-user";
 
 const defaultSplitMembers = [
-  { name:"Ana Navarro", role:"Design lead", email:"ana@studio.co", initials:"AN", pct:45, color:"#FFE566" },
-  { name:"James K.", role:"Developer", email:"james@studiomail.com", initials:"JK", pct:30, color:"#7DC4FA" },
-  { name:"Maya Chen", role:"Producer", email:"maya@studio.co", initials:"MC", pct:25, color:"#ABB6EE" },
+  { name:"Ana Navarro", role:"Design lead", email:"ana@studio.co", initials:"AN", pct:45, color:"#7E2EFF" },
+  { name:"James K.", role:"Developer", email:"james@studiomail.com", initials:"JK", pct:30, color:"#41ECFF" },
+  { name:"Maya Chen", role:"Producer", email:"maya@studio.co", initials:"MC", pct:25, color:"#9D7AFF" },
 ];
 
 const defaultProjects = [
-  { id:1, initials:"BC", name:"Brand Campaign", members:3, balance:6200, pct:67, split:"45/30/25", accent:"#FFF132", splitMembers:defaultSplitMembers },
-  { id:2, initials:"DS", name:"Dev Sprint Q2", members:2, balance:3750, pct:42, split:"60/40", accent:"#1182EB", splitMembers:[
-    { name:"James K.", role:"Developer", email:"james@studiomail.com", initials:"JK", pct:60, color:"#1182EB" },
-    { name:"Riley Stone", role:"Product", email:"riley@studio.co", initials:"RS", pct:40, color:"#3A47B9" },
+  { id:1, initials:"BC", name:"Brand Campaign", members:3, balance:6200, pct:67, split:"45/30/25", accent:"#41ECFF", splitMembers:defaultSplitMembers },
+  { id:2, initials:"DS", name:"Dev Sprint Q2", members:2, balance:3750, pct:42, split:"60/40", accent:"#7E2EFF", splitMembers:[
+    { name:"James K.", role:"Developer", email:"james@studiomail.com", initials:"JK", pct:60, color:"#7E2EFF" },
+    { name:"Riley Stone", role:"Product", email:"riley@studio.co", initials:"RS", pct:40, color:"#41ECFF" },
   ] },
-  { id:3, initials:"RF", name:"Research Fund", members:3, balance:2530, pct:25, split:"Equal", accent:"#3A47B9", splitMembers:[
-    { name:"Maya Chen", role:"Research", email:"maya@studio.co", initials:"MC", pct:34, color:"#3A47B9" },
-    { name:"Ana Navarro", role:"Strategy", email:"ana@studio.co", initials:"AN", pct:33, color:"#FFF132" },
-    { name:"Noah Lee", role:"Ops", email:"noah@studio.co", initials:"NL", pct:33, color:"#AEBBF7" },
+  { id:3, initials:"RF", name:"Research Fund", members:3, balance:2530, pct:25, split:"Equal", accent:"#9D7AFF", splitMembers:[
+    { name:"Maya Chen", role:"Research", email:"maya@studio.co", initials:"MC", pct:34, color:"#9D7AFF" },
+    { name:"Ana Navarro", role:"Strategy", email:"ana@studio.co", initials:"AN", pct:33, color:"#41ECFF" },
+    { name:"Noah Lee", role:"Ops", email:"noah@studio.co", initials:"NL", pct:33, color:"#5B1FD9" },
   ] },
 ];
 
 const defaultTransactions = [
-  { id:"seed-1", type:"in", projectId:1, projectName:"Brand Campaign", label:"Client payment received", date:"Today, 2:14 PM", amount:5000, displayAmount:"+$5,000.00", status:"Completed", color:"#FFF132" },
-  { id:"seed-2", type:"split", projectId:1, projectName:"Brand Campaign", label:"Auto split calculated", date:"Today, 2:14 PM", amount:5000, displayAmount:"3 payouts", status:"Ready", color:"#1182EB" },
-  { id:"seed-3", type:"payout", projectId:1, projectName:"Brand Campaign", label:"Payout to Ana Navarro", date:"Yesterday", amount:-1500, displayAmount:"-$1,500.00", status:"Completed", color:"#3A47B9", history:["Pending","Sent","Completed"] },
-  { id:"seed-4", type:"in", projectId:2, projectName:"Dev Sprint Q2", label:"Invoice paid", date:"Apr 11", amount:3200, displayAmount:"+$3,200.00", status:"Completed", color:"#FFF132" },
+  { id:"seed-1", type:"in", projectId:1, projectName:"Brand Campaign", label:"Client payment received", date:"Today, 2:14 PM", amount:5000, displayAmount:"+$5,000.00", status:"Completed", color:"#41ECFF" },
+  { id:"seed-2", type:"split", projectId:1, projectName:"Brand Campaign", label:"Auto split calculated", date:"Today, 2:14 PM", amount:5000, displayAmount:"3 payouts", status:"Ready", color:"#7E2EFF" },
+  { id:"seed-3", type:"payout", projectId:1, projectName:"Brand Campaign", label:"Payout to Ana Navarro", date:"Yesterday", amount:-1500, displayAmount:"-$1,500.00", status:"Completed", color:"#9D7AFF", history:["Pending","Sent","Completed"] },
+  { id:"seed-4", type:"in", projectId:2, projectName:"Dev Sprint Q2", label:"Invoice paid", date:"Apr 11", amount:3200, displayAmount:"+$3,200.00", status:"Completed", color:"#41ECFF" },
 ];
 
 const landingMetrics = [
@@ -48,10 +49,10 @@ const landingMetrics = [
 ];
 
 const demoActivity = [
-  { label:"Client payment simulated", amount:"+$5,000.00", status:"Completed", color:"#FFF132" },
+  { label:"Client payment simulated", amount:"+$5,000.00", status:"Completed", color:"#41ECFF" },
   { label:"FUEL platform fee", amount:"-$50.00", status:"Completed", color:"#888" },
-  { label:"Split calculation locked", amount:"3 payouts", status:"Completed", color:"#1182EB" },
-  { label:"Contributor payouts", amount:"$4,950.00", status:"Sent", color:"#3A47B9" },
+  { label:"Split calculation locked", amount:"3 payouts", status:"Completed", color:"#7E2EFF" },
+  { label:"Contributor payouts", amount:"$4,950.00", status:"Sent", color:"#9D7AFF" },
 ];
 
 const pageIcons = {
@@ -150,7 +151,7 @@ function Sidebar({ page, setPage, projects, user, onLogout }) {
   return (
     <aside className="app-sidebar" style={{ background:C.sidebar, borderRight:`1px solid ${C.border}`, fontFamily:fonts }}>
       <div className="sidebar-brand">
-        <div style={{ width:34, height:34, borderRadius:10, background:C.yellow, display:"flex", alignItems:"center", justifyContent:"center", fontSize:16, fontWeight:900, color:C.onAccent, fontFamily:titleFonts }}>F</div>
+        <div style={{ width:34, height:34, borderRadius:10, background:logoFill, display:"flex", alignItems:"center", justifyContent:"center", fontSize:16, fontWeight:900, color:C.onAccent, fontFamily:titleFonts }}>F</div>
         <div>
           <span style={{ display:"block", fontSize:17, fontWeight:700, color:C.light, fontFamily:titleFonts }}>fuel</span>
           <span style={{ display:"block", fontSize:11, color:C.muted }}>Project payouts</span>
@@ -164,8 +165,8 @@ function Sidebar({ page, setPage, projects, user, onLogout }) {
             className={`sidebar-item ${page===item ? "is-active" : ""}`}
             onClick={() => setPage(item)}
             style={{
-              borderColor: page===item ? "rgba(17,130,235,.22)" : "transparent",
-              background: page===item ? "rgba(17,130,235,.1)" : "transparent",
+              borderColor: page===item ? "rgba(126,46,255,.28)" : "transparent",
+              background: page===item ? "rgba(126,46,255,.12)" : "transparent",
               color: page===item ? C.light : C.muted,
             }}
           >
@@ -184,7 +185,7 @@ function Sidebar({ page, setPage, projects, user, onLogout }) {
         ))}
       </div>
       <div className="sidebar-footer" style={{ borderTop:`1px solid ${C.border}` }}>
-        <div style={{ width:38, height:38, borderRadius:"50%", background:C.yellow, display:"flex", alignItems:"center", justifyContent:"center", fontSize:11, fontWeight:800, color:C.onAccent }}>{user ? user.initials : "?"}</div>
+        <div style={{ width:38, height:38, borderRadius:"50%", background:logoFill, display:"flex", alignItems:"center", justifyContent:"center", fontSize:11, fontWeight:800, color:C.onAccent }}>{user ? user.initials : "?"}</div>
         <div style={{ minWidth:0, flex:1 }}>
           <div style={{ fontSize:13, color:C.light, fontWeight:600, fontFamily:fonts, whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis" }}>{user ? user.name : "Guest"}</div>
           <div style={{ fontSize:11, color:C.muted }}>{user ? user.provider : "Not signed in"}</div>

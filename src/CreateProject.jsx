@@ -2,29 +2,30 @@ import { useState } from "react";
 import { createProjectWallet } from "./solana";
 
 const C = {
-  bg:"#20091A", card:"#241535", border:"rgba(255,255,255,.08)", inner:"rgba(255,255,255,.06)",
-  yellow:"#1182EB", pink:"#3A47B9", orange:"#FFF132",
+  bg:"#080B14", card:"#0F1525", border:"rgba(255,255,255,.06)", inner:"rgba(255,255,255,.06)",
+  inputBg:"#060912",
+  yellow:"#7E2EFF", pink:"#41ECFF", orange:"#41ECFF",
   light:"#F5F7F7", muted:"#8C979C", dim:"#5A6468",
   onAccent:"#F5F7F7",
 };
-const fonts = "'DM Sans', sans-serif";
-const titleFonts = "'DM Sans', sans-serif";
-const COLORS = ["#1182EB","#FFF132","#20091A","#1F1252","#3A47B9"];
-const memberColors = ["#1182EB","#FFF132","#3A47B9","#1F1252","#6BA3FF"];
+const fonts = "'IBM Plex Sans', system-ui, sans-serif";
+const titleFonts = "'Sora', system-ui, sans-serif";
+const COLORS = ["#7E2EFF","#41ECFF","#080B14","#0F1525","#5B1FD9"];
+const memberColors = ["#7E2EFF","#41ECFF","#9D7AFF","#5B1FD9","#6B4DFF"];
 
 const TRIGGER_OPTIONS = [
-  { id:"instant",   label:"Instant",   sub:"On deposit", desc:"Splits fire the moment funds arrive. Best for project-based work.", color:"#1182EB" },
-  { id:"threshold", label:"Threshold", sub:"On balance",  desc:"Fires when wallet reaches a set amount. Great for donation wallets and DAOs.", color:"#FFF132" },
-  { id:"scheduled", label:"Scheduled", sub:"Time-based",  desc:"Weekly or monthly distributions, like a salary. Best for retainers.", color:"#3A47B9" },
+  { id:"instant",   label:"Instant",   sub:"On deposit", desc:"Splits fire the moment funds arrive. Best for project-based work.", color:"#7E2EFF" },
+  { id:"threshold", label:"Threshold", sub:"On balance",  desc:"Fires when wallet reaches a set amount. Great for donation wallets and DAOs.", color:"#41ECFF" },
+  { id:"scheduled", label:"Scheduled", sub:"Time-based",  desc:"Weekly or monthly distributions, like a salary. Best for retainers.", color:"#9D7AFF" },
 ];
 
 export default function CreateProject({ onDone, onCancel }) {
   const [step, setStep] = useState(1);
   const [form, setForm] = useState({
-    name:"", description:"", category:"", color:"#1182EB", currency:"USD",
+    name:"", description:"", category:"", color:"#7E2EFF", currency:"USD",
     trigger:"instant", thresholdAmount:"", scheduleFrequency:"weekly",
   });
-  const [members, setMembers] = useState([{ name:"You (owner)", email:"you@email.com", pct:100, color:"#1182EB", initials:"YN" }]);
+  const [members, setMembers] = useState([{ name:"You (owner)", email:"you@email.com", pct:100, color:"#7E2EFF", initials:"YN" }]);
   const [newEmail, setNewEmail] = useState("");
   const [wallet, setWallet] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -70,7 +71,7 @@ export default function CreateProject({ onDone, onCancel }) {
     });
   }
 
-  const inp = { width:"100%", background:"#160d1f", border:`1px solid ${C.border}`, borderRadius:8, padding:"11px 14px", fontSize:14, color:C.light, fontFamily:fonts, outline:"none", marginBottom:16 };
+  const inp = { width:"100%", background:C.inputBg, border:`1px solid ${C.border}`, borderRadius:8, padding:"11px 14px", fontSize:14, color:C.light, fontFamily:fonts, outline:"none", marginBottom:16 };
   const label = (t) => <div style={{ fontSize:11, fontWeight:600, color:C.muted, textTransform:"uppercase", letterSpacing:".08em", marginBottom:8 }}>{t}</div>;
 
   const StepBar = () => (
@@ -171,7 +172,7 @@ export default function CreateProject({ onDone, onCancel }) {
           </div>
           <div style={{ display:"flex", justifyContent:"flex-end", gap:10, marginTop:8 }}>
             <button onClick={onCancel} style={{ background:"transparent", border:`1px solid ${C.border}`, borderRadius:8, padding:"10px 18px", fontSize:13, color:C.muted, cursor:"pointer", fontFamily:fonts }}>Cancel</button>
-            <button onClick={() => form.name && setStep(2)} style={{ background: form.name ? C.yellow : "#333", color: form.name ? C.onAccent : C.dim, border:"none", borderRadius:8, padding:"10px 20px", fontSize:13, fontWeight:700, cursor: form.name ? "pointer":"default", fontFamily:fonts }}>
+            <button onClick={() => form.name && setStep(2)} style={{ background: form.name ? C.yellow : "#1a1f2e", color: form.name ? C.onAccent : C.dim, border:"none", borderRadius:8, padding:"10px 20px", fontSize:13, fontWeight:700, cursor: form.name ? "pointer":"default", fontFamily:fonts }}>
               Next: Add members →
             </button>
           </div>
@@ -190,16 +191,16 @@ export default function CreateProject({ onDone, onCancel }) {
                 <div style={{ fontSize:11, color:C.dim }}>{m.email}</div>
               </div>
               <input type="number" min="0" max="100" value={m.pct} onChange={e => updatePct(i,e.target.value)}
-                style={{ width:70, background:"#160d1f", border:`1px solid ${C.border}`, borderRadius:6, padding:"6px 10px", fontSize:13, color:C.light, fontFamily:fonts, textAlign:"center", outline:"none" }} />
+                style={{ width:70, background:C.inputBg, border:`1px solid ${C.border}`, borderRadius:6, padding:"6px 10px", fontSize:13, color:C.light, fontFamily:fonts, textAlign:"center", outline:"none" }} />
               <span style={{ fontSize:13, color:C.dim }}>%</span>
             </div>
           ))}
           <div style={{ display:"flex", gap:8, marginTop:14 }}>
             <input placeholder="teammate@email.com" value={newEmail} onChange={e => setNewEmail(e.target.value)} onKeyDown={e => e.key==="Enter" && addMember()}
-              style={{ flex:1, background:"#160d1f", border:`1px solid ${C.border}`, borderRadius:8, padding:"9px 12px", fontSize:13, color:C.light, fontFamily:fonts, outline:"none" }} />
-            <button onClick={addMember} style={{ background:"rgba(17,130,235,.1)", border:"1px solid rgba(17,130,235,.28)", borderRadius:8, padding:"9px 14px", fontSize:13, color:C.yellow, cursor:"pointer", fontFamily:fonts }}>+ Add</button>
+              style={{ flex:1, background:C.inputBg, border:`1px solid ${C.border}`, borderRadius:8, padding:"9px 12px", fontSize:13, color:C.light, fontFamily:fonts, outline:"none" }} />
+            <button onClick={addMember} style={{ background:"rgba(126,46,255,.12)", border:"1px solid rgba(126,46,255,.28)", borderRadius:8, padding:"9px 14px", fontSize:13, color:C.pink, cursor:"pointer", fontFamily:fonts }}>+ Add</button>
           </div>
-          <div style={{ height:8, borderRadius:4, background:"#160d1f", overflow:"hidden", margin:"16px 0 6px", display:"flex", gap:2 }}>
+          <div style={{ height:8, borderRadius:4, background:C.inputBg, overflow:"hidden", margin:"16px 0 6px", display:"flex", gap:2 }}>
             {members.map((m,i) => <div key={i} style={{ height:"100%", width:`${m.pct}%`, background:m.color, borderRadius:2 }} />)}
           </div>
           <div style={{ display:"flex", justifyContent:"space-between", fontSize:12, marginBottom:20 }}>
@@ -209,7 +210,7 @@ export default function CreateProject({ onDone, onCancel }) {
           <div style={{ display:"flex", justifyContent:"flex-end", gap:10 }}>
             <button onClick={() => setStep(1)} style={{ background:"transparent", border:`1px solid ${C.border}`, borderRadius:8, padding:"10px 18px", fontSize:13, color:C.muted, cursor:"pointer", fontFamily:fonts }}>← Back</button>
             <button onClick={handleCreateWallet} disabled={totalPct!==100||loading}
-              style={{ background: totalPct===100 ? C.yellow:"#333", color: totalPct===100 ? C.onAccent:C.dim, border:"none", borderRadius:8, padding:"10px 20px", fontSize:13, fontWeight:700, cursor: totalPct===100?"pointer":"default", fontFamily:fonts }}>
+              style={{ background: totalPct===100 ? C.yellow:"#1a1f2e", color: totalPct===100 ? C.onAccent:C.dim, border:"none", borderRadius:8, padding:"10px 20px", fontSize:13, fontWeight:700, cursor: totalPct===100?"pointer":"default", fontFamily:fonts }}>
               {loading ? "Creating wallet..." : "Next: Create wallet →"}
             </button>
           </div>
@@ -220,25 +221,25 @@ export default function CreateProject({ onDone, onCancel }) {
       {step === 3 && wallet && (
         <div style={{ background:C.card, border:`1px solid ${C.border}`, borderRadius:14, padding:24 }}>
           <div style={{ textAlign:"center", padding:"8px 0 24px" }}>
-            <div style={{ width:56, height:56, borderRadius:"50%", background:"rgba(17,130,235,.18)", display:"flex", alignItems:"center", justifyContent:"center", fontSize:24, margin:"0 auto 16px" }}>◎</div>
+            <div style={{ width:56, height:56, borderRadius:"50%", background:"rgba(126,46,255,.2)", display:"flex", alignItems:"center", justifyContent:"center", fontSize:24, margin:"0 auto 16px", color:C.pink }}>◎</div>
             <div style={{ fontSize:18, fontWeight:700, color:C.light, marginBottom:8, fontFamily:titleFonts }}>Project wallet created!</div>
-            <div style={{ fontSize:13, color:C.dim }}>Solana wallet generated for <span style={{ color:C.yellow }}>{form.name}</span></div>
+            <div style={{ fontSize:13, color:C.dim }}>Solana wallet generated for <span style={{ color:C.pink }}>{form.name}</span></div>
           </div>
 
-          <div style={{ background:"#160d1f", border:`1px solid ${C.border}`, borderRadius:10, padding:"14px 16px", marginBottom:10 }}>
+          <div style={{ background:C.inputBg, border:`1px solid ${C.border}`, borderRadius:10, padding:"14px 16px", marginBottom:10 }}>
             <div style={{ display:"flex", justifyContent:"space-between", marginBottom:6 }}>
               <span style={{ fontSize:11, fontWeight:600, color:C.muted, textTransform:"uppercase", letterSpacing:".06em" }}>Wallet address</span>
-              <span style={{ fontSize:10, fontWeight:600, padding:"2px 8px", borderRadius:20, background:"rgba(17,130,235,.18)", color:C.yellow }}>◎ Solana devnet</span>
+              <span style={{ fontSize:10, fontWeight:600, padding:"2px 8px", borderRadius:20, background:"rgba(126,46,255,.18)", color:C.pink }}>◎ Solana devnet</span>
             </div>
             <div style={{ fontFamily:fonts, fontSize:11, color:C.muted, wordBreak:"break-all" }}>{wallet.address}</div>
           </div>
 
-          <div style={{ background:"#160d1f", border:`1px solid ${C.border}`, borderRadius:10, padding:"14px 16px", marginBottom:10 }}>
+          <div style={{ background:C.inputBg, border:`1px solid ${C.border}`, borderRadius:10, padding:"14px 16px", marginBottom:10 }}>
             <div style={{ fontSize:11, fontWeight:600, color:C.muted, textTransform:"uppercase", letterSpacing:".06em", marginBottom:6 }}>Split rules</div>
             <div style={{ fontSize:13, color:C.light }}>{members.map(m => `${m.name}: ${m.pct}%`).join(" · ")}</div>
           </div>
 
-          <div style={{ background:"#160d1f", border:`1px solid ${C.border}`, borderRadius:10, padding:"14px 16px", marginBottom:10 }}>
+          <div style={{ background:C.inputBg, border:`1px solid ${C.border}`, borderRadius:10, padding:"14px 16px", marginBottom:10 }}>
             <div style={{ fontSize:11, fontWeight:600, color:C.muted, textTransform:"uppercase", letterSpacing:".06em", marginBottom:8 }}>Split trigger</div>
             {(() => {
               const opt = TRIGGER_OPTIONS.find(o => o.id === form.trigger);
@@ -258,8 +259,8 @@ export default function CreateProject({ onDone, onCancel }) {
             })()}
           </div>
 
-          <div style={{ background:"#160d1f", border:`1px solid ${C.border}`, borderRadius:10, padding:"14px 16px", display:"flex", gap:12, alignItems:"center", marginBottom:24 }}>
-            <div style={{ fontSize:20 }}>◎</div>
+          <div style={{ background:C.inputBg, border:`1px solid ${C.border}`, borderRadius:10, padding:"14px 16px", display:"flex", gap:12, alignItems:"center", marginBottom:24 }}>
+            <div style={{ fontSize:20, color:C.pink }}>◎</div>
             <div>
               <div style={{ fontSize:12, fontWeight:600, color:C.light }}>Invisible to your team</div>
               <div style={{ fontSize:11, color:C.dim, marginTop:2 }}>Members see USD. Solana runs silently underneath.</div>
