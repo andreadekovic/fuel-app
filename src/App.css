@@ -89,6 +89,14 @@ button {
   padding: 0 8px;
 }
 
+.sidebar-brand-logo {
+  width: 34px;
+  height: 34px;
+  object-fit: contain;
+  flex-shrink: 0;
+  display: block;
+}
+
 .sidebar-section-label {
   padding: 0 8px 10px;
   color: #596468;
@@ -451,6 +459,14 @@ button {
   position: relative;
   z-index: 2;
   width: min(680px, 100%);
+}
+
+.home-hero-logo {
+  width: 56px;
+  height: 56px;
+  margin-bottom: 12px;
+  object-fit: contain;
+  display: block;
 }
 
 .home-eyebrow {

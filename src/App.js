@@ -12,6 +12,7 @@ const C = {
 const fonts = "'IBM Plex Sans', system-ui, sans-serif";
 const titleFonts = "'Sora', system-ui, sans-serif";
 const logoFill = "linear-gradient(135deg, #7E2EFF, #5B1FD9)";
+const brandLogoSrc = `${process.env.PUBLIC_URL}/fuel-logo.png`;
 const PROJECTS_KEY = "fuel-projects";
 const TRANSACTIONS_KEY = "fuel-transactions";
 const USER_KEY = "fuel-user";
@@ -151,7 +152,7 @@ function Sidebar({ page, setPage, projects, user, onLogout }) {
   return (
     <aside className="app-sidebar" style={{ background:C.sidebar, borderRight:`1px solid ${C.border}`, fontFamily:fonts }}>
       <div className="sidebar-brand">
-        <div style={{ width:34, height:34, borderRadius:10, background:logoFill, display:"flex", alignItems:"center", justifyContent:"center", fontSize:16, fontWeight:900, color:C.onAccent, fontFamily:titleFonts }}>F</div>
+        <img className="sidebar-brand-logo" src={brandLogoSrc} alt="" width={34} height={34} decoding="async" />
         <div>
           <span style={{ display:"block", fontSize:17, fontWeight:700, color:C.light, fontFamily:titleFonts }}>fuel</span>
           <span style={{ display:"block", fontSize:11, color:C.muted }}>Project payouts</span>
@@ -232,6 +233,7 @@ function Home({ setPage, onCreateProject, user }) {
     <main className="home-page">
       <section className="home-hero">
         <div className="home-copy">
+          <img className="home-hero-logo" src={brandLogoSrc} alt="" width={56} height={56} decoding="async" />
           <div className="home-eyebrow">Project payout automation</div>
           <h1>FUEL</h1>
           <p>FUEL is project payout automation for distributed teams. Receive one client payment, split it automatically, and pay collaborators globally.</p>
