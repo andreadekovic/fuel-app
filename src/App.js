@@ -773,7 +773,9 @@ function ActivityRow({ tx, compact=false }) {
         <span>{tx.projectName} · {tx.date} · {tx.status}</span>
         {tx.history?.length > 0 && !compact && (
           <div className="mini-history">
-            {tx.history.map(status => <em key={status}>{status}</em>)}
+            {tx.history.map(status => (
+              <em key={status} className={`mini-history-pill mini-history-${status.toLowerCase()}`}>{status}</em>
+            ))}
           </div>
         )}
       </div>

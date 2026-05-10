@@ -13,6 +13,7 @@
   --fuel-border-soft: rgba(255, 255, 255, 0.08);
   --fuel-accent: #7e2eff;
   --fuel-highlight: #41ecff;
+  --fuel-success: #00d68f;
   --fuel-input: #060912;
   --font-display: "Sora", system-ui, sans-serif;
   --font-body: "IBM Plex Sans", system-ui, sans-serif;
@@ -1425,13 +1426,26 @@ button {
   margin-top: 8px;
 }
 
-.mini-history em {
+.mini-history-pill {
   padding: 3px 7px;
-  border: 1px solid rgba(126, 46, 255, 0.22);
   border-radius: 999px;
-  color: var(--fuel-accent);
   font-size: 10px;
   font-style: normal;
+}
+
+.mini-history-pill.mini-history-pending {
+  border: 1px solid rgba(126, 46, 255, 0.35);
+  color: var(--fuel-accent);
+}
+
+.mini-history-pill.mini-history-sent {
+  border: 1px solid rgba(65, 236, 255, 0.35);
+  color: var(--fuel-highlight);
+}
+
+.mini-history-pill.mini-history-completed {
+  border: 1px solid rgba(0, 214, 143, 0.42);
+  color: var(--fuel-success);
 }
 
 .about-page {
@@ -1563,7 +1577,7 @@ button {
 .status-2 { animation-delay: 2.8s; }
 .status-2 span { background: var(--fuel-highlight); }
 .status-3 { animation-delay: 3.5s; }
-.status-3 span { background: #5b1fd9; }
+.status-3 span { background: var(--fuel-success); }
 
 .activity-row {
   display: grid;
