@@ -233,7 +233,6 @@ function Home({ setPage, onCreateProject, user }) {
     <main className="home-page">
       <section className="home-hero">
         <div className="home-copy">
-          <img className="home-hero-logo" src={brandLogoSrc} alt="" width={56} height={56} decoding="async" />
           <div className="home-eyebrow">Project payout automation</div>
           <h1>FUEL</h1>
           <p>FUEL is project payout automation for distributed teams. Receive one client payment, split it automatically, and pay collaborators globally.</p>

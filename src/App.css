@@ -462,14 +462,6 @@ button {
   width: min(680px, 100%);
 }
 
-.home-hero-logo {
-  width: 56px;
-  height: 56px;
-  margin-bottom: 12px;
-  object-fit: contain;
-  display: block;
-}
-
 .home-eyebrow {
   margin-bottom: 14px;
   color: var(--fuel-highlight);
